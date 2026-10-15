@@ -29,7 +29,7 @@ rusqlite = { version = "0.37", features = ["bundled"] }
 thiserror = "2"
 log = "0.4"
 regex = "1"
-sha2 = "0.10"
+sha2 = "0.11"
 libc = "0.2"
 lopdf = "0.42"
 
