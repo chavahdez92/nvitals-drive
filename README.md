@@ -23,7 +23,7 @@ App de escritorio de código abierto para diagnosticar la salud de SSD NVMe. Lee
 
 | | macOS | Windows | Linux |
 |---|---|---|---|
-| Estado | ✅ Estable (macOS 14+, Apple Silicon) | 🚧 En desarrollo | 🚧 En desarrollo |
+| Estado | ✅ Estable (macOS 14+, Apple Silicon e Intel) | 🚧 En desarrollo | 🚧 En desarrollo |
 | SMART de NVMe interno | ✅ Sin privilegios | Previsto sin administrador | Previsto con una autorización por sesión |
 | SMART por gabinete USB | ❌ macOS no lo permite | Previsto | Previsto |
 | Gabinetes Thunderbolt / USB4 | ✅ | Previsto | Previsto |
@@ -32,8 +32,15 @@ Los detalles por plataforma y tipo de gabinete están en [`docs/CAPABILITY_MATRI
 
 ## Instalación (macOS)
 
+Requisitos: macOS 14 o posterior, en Apple Silicon o Intel.
+
 1. Instala smartmontools: `brew install smartmontools` (opcional para el benchmark: `brew install fio`).
-2. Descarga el `.dmg` de la [página de Releases](https://github.com/chavahdez92/nvitals-drive/releases) o compila desde el código (abajo).
+2. Descarga el `.dmg` de la [página de Releases](https://github.com/chavahdez92/nvitals-drive/releases), ábrelo y arrastra la app a Aplicaciones. También puedes compilarla desde el código (abajo).
+3. **Primera apertura:** la app todavía no está firmada con un certificado de Apple, así que macOS la bloquea la primera vez. Ve a **Ajustes del Sistema → Privacidad y seguridad** y pulsa **Abrir de todos modos**. Otra opción, desde la Terminal:
+   ```bash
+   xattr -dr com.apple.quarantine "/Applications/NVitals Drive.app"
+   ```
+4. Opcional: verifica la descarga con `shasum -a 256 -c SHA256SUMS` (el archivo está en el mismo release).
 
 ## Privacidad y seguridad
 
