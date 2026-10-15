@@ -45,7 +45,8 @@ jobs:
         id: notes
         run: |
           v="${GITHUB_REF_NAME#v}"
-          awk -v v="$v" '$0 ~ "^## \\[" v "\\]" {on=1; next} /^## \[/ {on=0} on' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+          # Sección de la versión, sin las definiciones de enlaces del final ([x]: url).
+          awk -v v="$v" '$0 ~ "^## \\[" v "\\]" {on=1; next} /^## \[/ || /^\[[^]]+\]: / {on=0} on' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
           cat >> "$RUNNER_TEMP/notes.md" <<'EOF'
 
           ---
@@ -71,7 +72,9 @@ jobs:
       - name: SHA256SUMS
         run: |
           dir=src-tauri/target/universal-apple-darwin/release/bundle/dmg
-          (cd "$dir" && shasum -a 256 *.dmg > SHA256SUMS && cat SHA256SUMS)
+          # GitHub cambia los espacios de los nombres de los assets por puntos
+          # («NVitals Drive_…» → «NVitals.Drive_…»): SHA256SUMS usa el nombre publicado.
+          (cd "$dir" && for f in *.dmg; do echo "$(shasum -a 256 "$f" | cut -d' ' -f1)  ${f// /.}"; done > SHA256SUMS && cat SHA256SUMS)
           gh release upload "$GITHUB_REF_NAME" "$dir/SHA256SUMS" --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
