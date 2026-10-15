@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 // Genera THIRD_PARTY_NOTICES.md con las dependencias de producción (Rust y npm) y sus licencias.
+// Lista nombres y licencias, sin versiones: así una actualización de versión (p. ej. un PR de
+// Dependabot) no lo desactualiza; solo cambia si entra o sale un paquete o cambia una licencia.
 //
 //   node scripts/with-cargo.mjs node scripts/third-party-notices.mjs          # escribe el archivo
 //   node scripts/with-cargo.mjs node scripts/third-party-notices.mjs --check  # falla si está desactualizado (CI)
@@ -30,8 +32,10 @@ const npm = Object.entries(npmRaw)
   .flatMap(([license, pkgs]) => pkgs.flatMap((p) => (p.versions ?? [p.version]).map((v) => ({ name: p.name, version: v, license, url: p.homepage ?? '' }))))
   .sort((a, b) => a.name.localeCompare(b.name));
 
-const row = (d) => `| ${d.url ? `[${d.name}](${d.url})` : d.name} | ${d.version} | ${d.license} |`;
-const table = (list) => ['| Paquete | Versión | Licencia |', '|---|---|---|', ...list.map(row)].join('\n');
+// Un renglón por paquete y licencia (las versiones repetidas de un mismo crate se unen).
+const unique = (list) => [...new Map(list.map((d) => [`${d.name}\u0000${d.license}`, d])).values()];
+const row = (d) => `| ${d.url ? `[${d.name}](${d.url})` : d.name} | ${d.license} |`;
+const table = (list) => ['| Paquete | Licencia |', '|---|---|', ...unique(list).map(row)].join('\n');
 
 const text = `# Avisos de terceros
 
@@ -49,11 +53,11 @@ ni se distribuyen con ella.
 | smartmontools (\`smartctl\`) | Lectura de datos SMART | GPL-2.0-or-later | https://github.com/smartmontools/smartmontools |
 | fio | Benchmark de lectura y escritura | GPL-2.0 | https://github.com/axboe/fio |
 
-## Dependencias de npm (interfaz) — ${npm.length}
+## Dependencias de npm (interfaz) — ${unique(npm).length}
 
 ${table(npm)}
 
-## Crates de Rust (núcleo) — ${crates.length}
+## Crates de Rust (núcleo) — ${unique(crates).length}
 
 Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 
@@ -68,5 +72,5 @@ if (process.argv.includes('--check')) {
   }
 } else {
   writeFileSync(OUT, text);
-  console.log(`THIRD_PARTY_NOTICES.md: ${npm.length} paquetes npm, ${crates.length} crates`);
+  console.log(`THIRD_PARTY_NOTICES.md: ${unique(npm).length} paquetes npm, ${unique(crates).length} crates`);
 }
