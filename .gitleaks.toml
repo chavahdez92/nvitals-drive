@@ -1,0 +1,9 @@
+# gitleaks: reglas por defecto + excepciones para datos de ejemplo.
+# Los fixtures ya están anonimizados (scripts/anonymize-fixture.mjs), pero sus UUID y
+# seriales ficticios tienen la entropía de una clave y la regla genérica los marca.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Fixtures anonimizados y muestras de investigación"
+paths = ['''^fixtures/''', '''^docs/research/''']

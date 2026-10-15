@@ -7,6 +7,9 @@ all-features = false
 [advisories]
 version = 2
 yanked = "deny"
+# Solo los crates que usamos directamente: los avisos de «sin mantenimiento» en dependencias
+# indirectas de Tauri (unic-*, proc-macro-error, vía gtk/glib) no tienen arreglo de nuestro lado.
+unmaintained = "workspace"
 ignore = []
 
 [licenses]

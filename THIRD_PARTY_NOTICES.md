@@ -26,7 +26,7 @@ ni se distribuyen con ella.
 | [react-dom](https://react.dev/) | 19.3.0 | MIT |
 | [scheduler](https://react.dev/) | 0.28.0 | MIT |
 
-## Crates de Rust (núcleo) — 538
+## Crates de Rust (núcleo) — 541
 
 Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 
@@ -70,7 +70,6 @@ Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 | [brotli-decompressor](https://github.com/dropbox/rust-brotli-decompressor) | 5.0.3 | BSD-3-Clause/MIT |
 | [bs58](https://github.com/Nullus157/bs58-rs) | 0.5.1 | MIT/Apache-2.0 |
 | [bumpalo](https://github.com/fitzgen/bumpalo) | 3.20.3 | MIT OR Apache-2.0 |
-| [bytecount](https://github.com/llogiq/bytecount) | 0.6.9 | Apache-2.0/MIT |
 | [bytemuck](https://github.com/Lokathor/bytemuck) | 1.25.2 | Zlib OR Apache-2.0 OR MIT |
 | [byteorder](https://github.com/BurntSushi/byteorder) | 1.5.0 | Unlicense OR MIT |
 | [bytes](https://github.com/tokio-rs/bytes) | 1.12.1 | MIT |
@@ -86,6 +85,7 @@ Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 | [cfb](https://github.com/mdsteele/rust-cfb) | 0.7.3 | MIT |
 | [cfg-expr](https://github.com/EmbarkStudios/cfg-expr) | 0.15.8 | MIT OR Apache-2.0 |
 | [cfg-if](https://github.com/rust-lang/cfg-if) | 1.0.5 | MIT OR Apache-2.0 |
+| [chacha20](https://github.com/RustCrypto/stream-ciphers) | 0.10.2 | MIT OR Apache-2.0 |
 | [chrono](https://github.com/chronotope/chrono) | 0.4.45 | MIT OR Apache-2.0 |
 | [cipher](https://github.com/RustCrypto/traits) | 0.4.4 | MIT OR Apache-2.0 |
 | [combine](https://github.com/Marwes/combine) | 4.6.8 | MIT |
@@ -97,6 +97,7 @@ Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 | [core-graphics](https://github.com/servo/core-foundation-rs) | 0.25.0 | MIT OR Apache-2.0 |
 | [core-graphics-types](https://github.com/servo/core-foundation-rs) | 0.2.0 | MIT OR Apache-2.0 |
 | [cpufeatures](https://github.com/RustCrypto/utils) | 0.2.17 | MIT OR Apache-2.0 |
+| [cpufeatures](https://github.com/RustCrypto/utils) | 0.3.1 | MIT OR Apache-2.0 |
 | [crc32fast](https://github.com/srijs/rust-crc32fast) | 1.5.2 | MIT OR Apache-2.0 |
 | [crossbeam-channel](https://github.com/crossbeam-rs/crossbeam) | 0.5.17 | MIT OR Apache-2.0 |
 | [crossbeam-deque](https://github.com/crossbeam-rs/crossbeam) | 0.8.8 | MIT OR Apache-2.0 |
@@ -252,7 +253,7 @@ Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 | [litemap](https://github.com/unicode-org/icu4x) | 0.8.3 | Unicode-3.0 |
 | [lock_api](https://github.com/Amanieu/parking_lot) | 0.4.14 | MIT OR Apache-2.0 |
 | [log](https://github.com/rust-lang/log) | 0.4.34 | MIT OR Apache-2.0 |
-| [lopdf](https://github.com/J-F-Liu/lopdf.git) | 0.36.0 | MIT |
+| [lopdf](https://github.com/J-F-Liu/lopdf.git) | 0.42.0 | MIT |
 | [mac-notification-sys](https://github.com/h4llow3En/mac-notification-sys) | 0.6.15 | MIT/Apache-2.0 |
 | [markup5ever](https://github.com/servo/html5ever) | 0.38.0 | MIT OR Apache-2.0 |
 | [md-5](https://github.com/RustCrypto/hashes) | 0.10.6 | MIT OR Apache-2.0 |
@@ -268,7 +269,6 @@ Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 | [ndk-sys](https://github.com/rust-mobile/ndk) | 0.6.0+11769913 | MIT OR Apache-2.0 |
 | [new_debug_unreachable](https://github.com/mbrubeck/rust-debug-unreachable) | 1.0.6 | MIT |
 | [nom](https://github.com/rust-bakery/nom) | 8.0.0 | MIT |
-| [nom_locate](https://github.com/fflorent/nom_locate) | 5.0.0 | MIT |
 | [notify-rust](https://github.com/hoodie/notify-rust) | 4.18.0 | MIT OR Apache-2.0 |
 | [num_enum](https://github.com/illicitonion/num_enum) | 0.7.6 | BSD-3-Clause OR MIT OR Apache-2.0 |
 | [num_enum_derive](https://github.com/illicitonion/num_enum) | 0.7.6 | BSD-3-Clause OR MIT OR Apache-2.0 |
@@ -333,8 +333,10 @@ Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 | [quote](https://github.com/dtolnay/quote) | 1.0.47 | MIT OR Apache-2.0 |
 | [r-efi](https://github.com/r-efi/r-efi) | 5.3.0 | MIT OR Apache-2.0 OR LGPL-2.1-or-later |
 | [r-efi](https://github.com/r-efi/r-efi) | 6.0.0 | MIT OR Apache-2.0 OR LGPL-2.1-or-later |
+| [rand](https://github.com/rust-random/rand) | 0.10.3 | MIT OR Apache-2.0 |
 | [rand](https://github.com/rust-random/rand) | 0.9.5 | MIT OR Apache-2.0 |
 | [rand_chacha](https://github.com/rust-random/rand) | 0.9.0 | MIT OR Apache-2.0 |
+| [rand_core](https://github.com/rust-random/rand_core) | 0.10.1 | MIT OR Apache-2.0 |
 | [rand_core](https://github.com/rust-random/rand) | 0.9.5 | MIT OR Apache-2.0 |
 | [rangemap](https://github.com/jeffparsons/rangemap) | 1.8.0 | MIT/Apache-2.0 |
 | [raw-window-handle](https://github.com/rust-windowing/raw-window-handle) | 0.6.2 | MIT OR Apache-2.0 OR Zlib |
@@ -452,6 +454,7 @@ Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 | [tracing-core](https://github.com/tokio-rs/tracing) | 0.1.36 | MIT |
 | [tray-icon](https://github.com/tauri-apps/tray-icon) | 0.24.2 | MIT OR Apache-2.0 |
 | [try-lock](https://github.com/seanmonstar/try-lock) | 0.2.5 | MIT |
+| [ttf-parser](https://github.com/harfbuzz/ttf-parser) | 0.25.1 | MIT OR Apache-2.0 |
 | [typeid](https://github.com/dtolnay/typeid) | 1.0.3 | MIT OR Apache-2.0 |
 | [typenum](https://github.com/paholg/typenum) | 1.20.1 | MIT OR Apache-2.0 |
 | [uds_windows](https://github.com/haraldh/rust_uds_windows) | 1.2.1 | MIT |
@@ -553,7 +556,7 @@ Incluye las dependencias de todas las plataformas (macOS, Windows y Linux).
 | [x11](https://github.com/AltF02/x11-rs.git) | 2.21.0 | MIT |
 | [x11-dl](https://github.com/AltF02/x11-rs.git) | 2.21.0 | MIT |
 | [yoke](https://github.com/unicode-org/icu4x) | 0.8.3 | Unicode-3.0 |
-| [yoke-derive](https://github.com/unicode-org/icu4x) | 0.8.3 | Unicode-3.0 |
+| [yoke-derive](https://github.com/unicode-org/icu4x) | 0.8.4 | Unicode-3.0 |
 | [zbus](https://github.com/z-galaxy/zbus/) | 5.19.0 | MIT |
 | [zbus_macros](https://github.com/z-galaxy/zbus/) | 5.19.0 | MIT |
 | [zbus_names](https://github.com/z-galaxy/zbus/) | 4.3.4 | MIT |
