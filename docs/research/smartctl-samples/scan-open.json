@@ -1,0 +1,30 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      5
+    ],
+    "pre_release": false,
+    "svn_revision": "5714",
+    "platform_info": "Darwin 27.0.0 arm64",
+    "build_info": "(local build)",
+    "argv": [
+      "smartctl",
+      "--scan-open",
+      "-j"
+    ],
+    "exit_status": 0
+  },
+  "devices": [
+    {
+      "name": "IOService:/AppleARMPE/arm-io@10F00000/AppleSoCIO/ans@19600000/AppleASCWrapV6/iop-ans-nub/RTBuddy(ANS2)/RTBuddyService/AppleANS3CGv2Controller/NS_01@1",
+      "info_name": "IOService:/AppleARMPE/arm-io@10F00000/AppleSoCIO/ans@19600000/AppleASCWrapV6/iop-ans-nub/RTBuddy(ANS2)/RTBuddyService/AppleANS3CGv2Controller/NS_01@1",
+      "type": "nvme",
+      "protocol": "NVMe"
+    }
+  ]
+}

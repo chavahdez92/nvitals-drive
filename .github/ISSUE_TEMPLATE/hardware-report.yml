@@ -1,0 +1,61 @@
+name: Reporte de hardware
+description: Cuéntanos qué funciona con tu disco, gabinete o puente USB.
+labels: [hardware-report]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Estos reportes alimentan la matriz de compatibilidad (`docs/CAPABILITY_MATRIX.md`).
+        **Antes de pegar salidas de smartctl, quita el número de serie** (o usa `pnpm anonymize archivo.json --write`).
+  - type: dropdown
+    id: os
+    attributes:
+      label: Sistema operativo
+      options: [macOS, Windows, Linux]
+    validations:
+      required: true
+  - type: input
+    id: os-version
+    attributes:
+      label: Versión del sistema
+    validations:
+      required: true
+  - type: input
+    id: disk
+    attributes:
+      label: Disco (marca y modelo)
+      placeholder: Kingston SNV2S1000G
+    validations:
+      required: true
+  - type: dropdown
+    id: connection
+    attributes:
+      label: Conexión
+      options: [Interno (M.2 / PCIe), Gabinete Thunderbolt / USB4, Gabinete USB 3.x, SATA, Otro]
+    validations:
+      required: true
+  - type: input
+    id: bridge
+    attributes:
+      label: Gabinete o puente
+      placeholder: ASMedia ASM2464PD · JMicron JMS583 · Realtek RTL9210B
+  - type: checkboxes
+    id: works
+    attributes:
+      label: Qué funcionó
+      options:
+        - label: Aparece en Dispositivos
+        - label: Datos SMART completos
+        - label: Temperatura en vivo
+        - label: Velocidad del enlace correcta
+        - label: Escaneo de lectura
+        - label: Benchmark
+  - type: input
+    id: smartctl
+    attributes:
+      label: Versión de smartctl
+  - type: textarea
+    id: output
+    attributes:
+      label: Salida de `smartctl -x -j` (anonimizada)
+      render: json

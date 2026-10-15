@@ -1,0 +1,36 @@
+/* Estilos globales del prototipo (bloque <helmet> de prototype-design/HealthDiskInfo.dc.html). */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font-family:var(--font-sans);font-size:13px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;background:#0b0c0f}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:default;white-space:nowrap}
+:focus{outline:none}
+:focus-visible{outline:none;box-shadow:var(--focus-ring)!important}
+a{color:var(--accent-fg);text-decoration:none}
+a:hover{color:var(--accent-hover);text-decoration:underline}
+::selection{background:var(--accent-soft)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:250ms;animation-timing-function:cubic-bezier(0.23,1,0.32,1)}
+@keyframes hdi-shimmer{0%,100%{opacity:.45}50%{opacity:1}}
+@keyframes hdi-spin{to{transform:rotate(360deg)}}
+@keyframes hdi-beat{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+@keyframes hdi-listen{0%{opacity:.0;transform:scale(.6)}30%{opacity:.35}100%{opacity:0;transform:scale(1.5)}}
+@keyframes hdi-indet{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+/* Benchmark (desviación #17): barras que crecen desde cero y flujo de datos por la cadena de conexión. */
+@keyframes hdi-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes hdi-flow{from{background-position:0 0}to{background-position:24px 0}}
+@media (prefers-reduced-motion: reduce){[data-bench-anim]{animation:none!important;transition:none!important}}
+[data-motion="reduced"] *{animation-duration:0s!important;animation-iteration-count:1!important}
+@media (prefers-reduced-motion: reduce){[data-motion="system"] *{animation-duration:0s!important;animation-iteration-count:1!important}}
+
+/* ── App nativa (Tauri) ──
+   En la app real la ventana es la de macOS: el fondo de la ventana es transparente para que se
+   vea el material nativo (vibrancy) detrás de la barra lateral. Desviación aprobada en el plan §7.3. */
+html[data-native] body{background:transparent}
+/* La ventana del prototipo ocupa toda la ventana nativa: sin márgenes, radio, sombra ni fondo propio. */
+html[data-native] [data-hdi-root] > div:not([aria-hidden]):not([data-component]){padding:0!important;min-width:0!important;display:block!important;height:100%}
+html[data-native] [data-component="Window"]{width:100vw!important;height:100vh!important;min-width:0!important;min-height:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+/* Los semáforos son los nativos (trafficLightPosition); se conserva su espacio. */
+html[data-native] .hdi-sidebar > div:first-child > span{visibility:hidden}
+/* Transparencia reducida: material sólido también sobre la vibrancy nativa. */
+html[data-native] [data-transparency="reduced"] [data-component="Window"]{background:var(--mat-window-bg)!important}
+@media (prefers-reduced-transparency: reduce){html[data-native] [data-transparency="system"] [data-component="Window"]{background:var(--mat-window-bg)!important}}

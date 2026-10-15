@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta charset="utf-8">
+<title>Reporte de salud de SSD — HealthDiskInfo</title>
+<link rel="stylesheet" href="css/tokens.css">
+<script src="js/icons.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="./doc-page.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--font-sans);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;color:var(--text-primary)}
+doc-page:not(:defined){visibility:hidden}
+a{color:var(--accent-fg);text-decoration:none}
+a:hover{text-decoration:underline}
+</style>
+</helmet>
+
+<div data-theme="light" data-component="ReportDocument" data-variant="{{ paper }}" style="color:var(--text-primary);font-size:16px;line-height:1.4">
+<doc-page size="{{ paper }}">
+
+  <!-- ═════ Página 1 · Veredicto, identidad y métricas ═════ -->
+  <section class="page" data-screen-label="Reporte p1" style="padding:0.55in 0.6in 0.5in;display:flex;flex-direction:column;gap:20px;height:100%">
+    <header style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:14px;border-bottom:1.5px solid var(--gray-12)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <img src="assets/app-icon.svg" width="48" height="48" alt="" style="display:block">
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span style="font-size:13px;font-weight:600;letter-spacing:0.02em;color:var(--text-secondary)">HealthDiskInfo</span>
+          <h1 style="margin:0;white-space:nowrap;font-family:var(--font-display);font-size:28px;line-height:32px;font-weight:700;letter-spacing:-0.02em">Reporte de salud de SSD</h1>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:auto auto;gap:2px 12px;font-size:13px;text-align:right">
+        <span style="color:var(--text-secondary)">ID del reporte</span><span style="font-family:var(--font-mono);font-weight:600">{{ rid }}</span>
+        <span style="color:var(--text-secondary)">Fecha</span><span>{{ date }}</span>
+        <span style="color:var(--text-secondary)">Técnico</span><span>{{ tech }}</span>
+        <span style="color:var(--text-secondary)">Referencia</span><span>{{ client }}</span>
+      </div>
+    </header>
+
+    <!-- @component ReportVerdict | states: optimal, good, warning, critical, nodata -->
+    <div data-component="ReportVerdict" data-state="{{ d.verdict }}" style="display:flex;gap:24px;align-items:center;padding:18px 20px;border-radius:12px;border:2px solid {{ v.solid }};background:{{ v.bg }}">
+      <div style="position:relative;width:120px;height:120px;flex:none">
+        <svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg);display:block"><circle cx="60" cy="60" r="53" fill="none" style="stroke:var(--gray-5);stroke-width:10"></circle><circle cx="60" cy="60" r="53" fill="none" style="stroke:{{ v.solid }};stroke-width:10;stroke-linecap:butt;stroke-dasharray:{{ ring.c }};stroke-dashoffset:{{ ring.off }}"></circle></svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center"><div style="display:block;white-space:nowrap;font-size:30px;line-height:34px;font-weight:700;letter-spacing:-0.02em">{{ lifeText }}</div><div style="display:block;white-space:nowrap;font-size:12px;line-height:16px;color:var(--text-secondary)">{{ lifeCaption }}</div></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+        <span style="display:inline-flex;align-self:flex-start;align-items:center;gap:6px;font-size:18px;font-weight:700;color:{{ v.fg }}"><svg width="20" height="20"><use href="{{ v.icon }}"></use></svg>{{ v.label }}</span>
+        <p style="margin:0;font-size:16px;line-height:22px;text-wrap:pretty">{{ d.sentence }}</p>
+        <span style="font-size:13px;color:var(--text-secondary)">{{ d.model }} · {{ cap }} · {{ d.connLabel }} · {{ d.link }}</span>
+      </div>
+    </div>
+
+    <sc-if value="{{ showSummary }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <h2 style="margin:0;font-size:16px;font-weight:700">Métricas clave</h2>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+          <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="8">
+            <div style="display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:8px;border:1px solid var(--gray-6)">
+              <span style="font-size:12px;color:var(--text-secondary)">{{ m.label }}</span>
+              <span style="font-size:19px;font-weight:700;letter-spacing:-0.01em">{{ m.value }}</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:{{ m.fg }}"><svg width="12" height="12"><use href="{{ m.icon }}"></use></svg>{{ m.st }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showIdentity }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h2 style="margin:0;font-size:16px;font-weight:700">Identidad del disco</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:24px;font-size:14px">
+          <sc-for list="{{ identity }}" as="kv" hint-placeholder-count="12">
+            <div style="display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--gray-5)"><span style="color:var(--text-secondary)">{{ kv.k }}</span><span style="font-family:{{ kv.font }};text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ kv.v }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <footer style="margin-top:auto;display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--gray-6);font-size:12px;color:var(--text-secondary)"><span>HealthDiskInfo · {{ rid }}</span><span style="white-space:nowrap;flex:none">Página 1 de {{ total }}</span></footer>
+  </section>
+
+  <!-- ═════ Página 2 · Tabla SMART ═════ -->
+  <sc-if value="{{ showSmart }}" hint-placeholder-val="{{ true }}">
+    <section class="page" data-screen-label="Reporte p2" style="padding:0.55in 0.6in 0.5in;display:flex;flex-direction:column;gap:14px;height:100%">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:1.5px solid var(--gray-12)"><h2 style="margin:0;font-size:20px;font-weight:700;letter-spacing:-0.01em">Salud SMART</h2><span style="font-size:12px;color:var(--text-secondary)">{{ d.model }} · Log NVMe 0x02</span></div>
+      <sc-if value="{{ hasSmart }}" hint-placeholder-val="{{ true }}">
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <thead><tr style="text-align:left;color:var(--text-secondary);font-size:12px"><th style="padding:4px 0;font-weight:600">Atributo</th><th style="padding:4px 8px;font-weight:600;text-align:right">Valor</th><th style="padding:4px 8px;font-weight:600">Campo · crudo</th><th style="padding:4px 0;font-weight:600">Estado</th></tr></thead>
+          <tbody>
+            <sc-for list="{{ smartRows }}" as="r" hint-placeholder-count="22">
+              <tr style="border-top:1px solid var(--gray-5);background:{{ r.bg }}"><td style="padding:4px 0;font-weight:{{ r.w }}">{{ r.name }}</td><td style="padding:4px 8px;text-align:right;font-weight:600">{{ r.val }}</td><td style="padding:4px 8px;font-family:var(--font-mono);font-size:12px;color:var(--text-secondary)">{{ r.raw }}</td><td style="padding:4px 0"><span style="display:inline-flex;align-items:center;gap:4px;color:{{ r.fg }}"><svg width="12" height="12"><use href="{{ r.icon }}"></use></svg>{{ r.st }}</span></td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <h3 style="margin:0;font-size:15px;font-weight:700">Advertencia crítica decodificada · {{ critHex }}</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;font-size:14px">
+            <sc-for list="{{ flags }}" as="f" hint-placeholder-count="6"><span style="display:flex;align-items:center;gap:6px;font-weight:{{ f.w }}"><svg width="14" height="14" style="color:{{ f.fg }}"><use href="{{ f.icon }}"></use></svg>{{ f.label }} · {{ f.state }}</span></sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noSmart }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:16px;color:var(--text-secondary)">SMART no disponible: {{ d.reason }}</p></sc-if>
+      <footer style="margin-top:auto;display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--gray-6);font-size:12px;color:var(--text-secondary)"><span>HealthDiskInfo · {{ rid }}</span><span style="white-space:nowrap;flex:none">Página {{ pSmart }} de {{ total }}</span></footer>
+    </section>
+  </sc-if>
+
+  <!-- ═════ Página 3 · Temperatura y pruebas ═════ -->
+  <sc-if value="{{ showP3 }}" hint-placeholder-val="{{ true }}">
+    <section class="page" data-screen-label="Reporte p3" style="padding:0.55in 0.6in 0.5in;display:flex;flex-direction:column;gap:14px;height:100%">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:1.5px solid var(--gray-12)"><h2 style="margin:0;font-size:20px;font-weight:700;letter-spacing:-0.01em">Temperatura y pruebas</h2><span style="font-size:12px;color:var(--text-secondary)">{{ d.model }}</span></div>
+      <sc-if value="{{ showTemp }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="margin:0;font-size:15px;font-weight:700">Temperatura durante la sesión</h3><span style="font-size:12px;color:var(--text-secondary)">{{ temp.caption }}</span></div>
+          <div style="position:relative"><svg viewBox="0 0 700 170" width="100%" style="display:block">
+            <rect x="40" y="{{ temp.yCrit }}" width="656" height="{{ temp.hWarn }}" style="fill:var(--gray-3)"></rect>
+            <sc-for list="{{ temp.ticks }}" as="t" hint-placeholder-count="5"><line x1="40" x2="696" y1="{{ t.y }}" y2="{{ t.y }}" style="stroke:var(--gray-5)"></line></sc-for>
+            <line x1="40" x2="696" y1="{{ temp.yWarn }}" y2="{{ temp.yWarn }}" style="stroke:var(--gray-10);stroke-dasharray:5 4"></line>
+            <line x1="40" x2="696" y1="{{ temp.yCrit }}" y2="{{ temp.yCrit }}" style="stroke:var(--gray-12);stroke-dasharray:2 3"></line>
+            
+            <path d="{{ temp.path }}" fill="none" style="stroke:var(--gray-12);stroke-width:1.75"></path>
+            </svg>
+          <sc-for list="{{ temp.ticks }}" as="t" hint-placeholder-count="5"><span style="position:absolute;left:-12px;width:calc(5.7% + 12px);top:{{ t.top }};transform:translateY(-50%);text-align:right;font-size:11px;color:var(--text-secondary);white-space:nowrap">{{ t.label }}</span></sc-for>
+          <span style="position:absolute;right:0.6%;top:{{ temp.lwTop }};transform:translateY(-100%);font-size:11px;color:var(--text-secondary)">{{ temp.warnLbl }}</span>
+          <span style="position:absolute;left:5.7%;bottom:0;font-size:11px;color:var(--text-secondary)">0:00</span><span style="position:absolute;right:0.6%;bottom:0;font-size:11px;color:var(--text-secondary)">{{ temp.x1 }}</span>
+          </div>
+          <span style="font-size:13px;color:var(--text-secondary)">{{ temp.stats }}</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ showTests }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="margin:0;font-size:15px;font-weight:700">Resultados de las pruebas</h3><span style="display:inline-flex;align-items:center;gap:5px;font-size:14px;font-weight:700;color:{{ scan.fg }}"><svg width="14" height="14"><use href="{{ scan.icon }}"></use></svg>{{ scan.result }}</span></div>
+          <sc-if value="{{ scan.has }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;font-size:13px">
+                <sc-for list="{{ scan.stats }}" as="s" hint-placeholder-count="6"><div style="display:flex;flex-direction:column;padding:6px 8px;border-radius:6px;border:1px solid var(--gray-6)"><span style="color:var(--text-secondary);font-size:11.5px">{{ s.k }}</span><span style="font-weight:700">{{ s.v }}</span></div></sc-for>
+              </div>
+              <div style="position:relative"><sc-for list="{{ scan.ticks }}" as="t" hint-placeholder-count="4"><span style="position:absolute;left:-12px;width:calc(5.7% + 12px);top:{{ t.top }};transform:translateY(-50%);text-align:right;font-size:11px;color:var(--text-secondary)">{{ t.label }}</span></sc-for><svg viewBox="0 0 700 130" width="100%" style="display:block">
+                <sc-for list="{{ scan.ticks }}" as="t" hint-placeholder-count="4"><line x1="40" x2="696" y1="{{ t.y }}" y2="{{ t.y }}" style="stroke:var(--gray-5)"></line></sc-for>
+                <path d="{{ scan.path }}" fill="none" style="stroke:var(--gray-12);stroke-width:1.25"></path>
+                <sc-for list="{{ scan.marks }}" as="z" hint-placeholder-count="0"><path d="{{ z.d }}" style="fill:var(--gray-12)"></path></sc-for>
+                <text x="40" y="126" style="font-size:11px;fill:var(--text-secondary)">0 % LBA</text><text x="696" y="126" text-anchor="end" style="font-size:11px;fill:var(--text-secondary)">100 % LBA · MB/s</text>
+              </svg></div>
+              <sc-if value="{{ scan.hasZones }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px 16px;font-family:var(--font-mono);font-size:11.5px"><sc-for list="{{ scan.zones }}" as="z" hint-placeholder-count="3"><span style="white-space:nowrap">▲ {{ z }}</span></sc-for></div>
+              </sc-if>
+              <table style="width:100%;border-collapse:collapse;font-size:14px">
+                <thead><tr style="text-align:left;color:var(--text-secondary);font-size:12px"><th style="padding:3px 0;font-weight:600">SMART antes vs. después</th><th style="padding:3px 8px;text-align:right;font-weight:600">Antes</th><th style="padding:3px 8px;text-align:right;font-weight:600">Después</th><th style="padding:3px 0;font-weight:600">Cambio</th></tr></thead>
+                <tbody><sc-for list="{{ scan.diff }}" as="r" hint-placeholder-count="7"><tr style="border-top:1px solid var(--gray-5)"><td style="padding:3px 0">{{ r.k }}</td><td style="padding:3px 8px;text-align:right">{{ r.a }}</td><td style="padding:3px 8px;text-align:right;font-weight:{{ r.w }}">{{ r.b }}</td><td style="padding:3px 0;font-weight:{{ r.w }}">{{ r.ch }}</td></tr></sc-for></tbody>
+              </table>
+            </div>
+          </sc-if>
+          <sc-if value="{{ scan.none }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:15px;color:var(--text-secondary)">No se ejecutaron escaneos de lectura en esta sesión. Las autopruebas SMART no se pueden iniciar en macOS; su historial se incluye en Registros.</p></sc-if>
+        </div>
+      </sc-if>
+      <footer style="margin-top:auto;display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--gray-6);font-size:12px;color:var(--text-secondary)"><span>HealthDiskInfo · {{ rid }}</span><span style="white-space:nowrap;flex:none">Página {{ pP3 }} de {{ total }}</span></footer>
+    </section>
+  </sc-if>
+
+  <!-- ═════ Página 4 · Registros, observaciones y apéndice ═════ -->
+  <section class="page" data-screen-label="Reporte p4" style="padding:0.55in 0.6in 0.5in;display:flex;flex-direction:column;gap:14px;height:100%">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:1.5px solid var(--gray-12)"><h2 style="margin:0;font-size:20px;font-weight:700;letter-spacing:-0.01em">{{ p4Title }}</h2><span style="font-size:12px;color:var(--text-secondary)">{{ d.model }}</span></div>
+    <sc-if value="{{ showLogs }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h3 style="margin:0;font-size:15px;font-weight:700">Log de información de errores</h3>
+        <sc-if value="{{ logs.hasErr }}" hint-placeholder-val="{{ false }}">
+          <table style="width:100%;border-collapse:collapse;font-size:12.5px;font-family:var(--font-mono)">
+            <thead><tr style="text-align:left;color:var(--text-secondary);font-family:var(--font-sans);font-size:12px"><th style="padding:3px 0">#</th><th style="padding:3px 6px;text-align:right">Conteo</th><th style="padding:3px 6px">SQID</th><th style="padding:3px 6px">CMDID</th><th style="padding:3px 6px">Estado</th><th style="padding:3px 6px;text-align:right">LBA</th><th style="padding:3px 0">NSID</th></tr></thead>
+            <tbody><sc-for list="{{ logs.err }}" as="e" hint-placeholder-count="3"><tr style="border-top:1px solid var(--gray-5)"><td style="padding:3px 0">{{ e.n }}</td><td style="padding:3px 6px;text-align:right">{{ e.c }}</td><td style="padding:3px 6px">{{ e.q }}</td><td style="padding:3px 6px">{{ e.cmd }}</td><td style="padding:3px 6px;font-family:var(--font-sans)">{{ e.s }}</td><td style="padding:3px 6px;text-align:right">{{ e.lba }}</td><td style="padding:3px 0">{{ e.ns }}</td></tr></sc-for></tbody>
+          </table>
+        </sc-if>
+        <span style="font-size:14px;color:var(--text-secondary)">{{ logs.errNote }}</span>
+        <h3 style="margin:6px 0 0;font-size:15px;font-weight:700">Log de autopruebas</h3>
+        <sc-for list="{{ logs.st }}" as="s" hint-placeholder-count="2"><span style="display:flex;align-items:center;gap:6px;font-size:14px"><svg width="13" height="13"><use href="{{ s.icon }}"></use></svg>{{ s.t }}</span></sc-for>
+      </div>
+    </sc-if>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h3 style="margin:0;font-size:15px;font-weight:700">Observaciones y recomendaciones</h3>
+      <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:15px;line-height:21px">
+        <sc-for list="{{ recs }}" as="r" hint-placeholder-count="3"><li style="text-wrap:pretty">{{ r }}</li></sc-for>
+      </ul>
+      <sc-if value="{{ hasNotes }}" hint-placeholder-val="{{ false }}"><p style="margin:4px 0 0;padding:8px 12px;border-left:3px solid var(--gray-9);font-size:15px;line-height:21px;white-space:pre-line">{{ notes }}</p></sc-if>
+    </div>
+    <sc-if value="{{ showAppendix }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h3 style="margin:0;font-size:15px;font-weight:700">Apéndice técnico</h3>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:2px 16px;font-size:13px"><span style="color:var(--text-secondary)">smartctl</span><span>7.5 (2025-04-30 r5714) · /opt/homebrew/bin/smartctl</span><span style="color:var(--text-secondary)">Plataforma</span><span>Darwin 27.0.0 arm64 · MacBook Pro (M5 Pro)</span><span style="color:var(--text-secondary)">HealthDiskInfo</span><span>{{ appVersion }}</span></div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead><tr style="text-align:left;color:var(--text-secondary)"><th style="padding:3px 0;font-weight:600">Hora</th><th style="padding:3px 8px;font-weight:600">Comando</th><th style="padding:3px 0;font-weight:600">Código de salida</th></tr></thead>
+          <tbody><sc-for list="{{ cmds }}" as="c" hint-placeholder-count="4"><tr style="border-top:1px solid var(--gray-5)"><td style="padding:3px 0;font-family:var(--font-mono)">{{ c.t }}</td><td style="padding:3px 8px;font-family:var(--font-mono)">{{ c.cmd }}</td><td style="padding:3px 0">{{ c.exit }}</td></tr></sc-for></tbody>
+        </table>
+        <div style="display:flex;flex-direction:column;gap:2px;font-size:12px"><span style="color:var(--text-secondary)">SHA-256 de los datos crudos (salida JSON de smartctl -x -j)</span><span style="font-family:var(--font-mono);word-break:break-all">{{ sha }}</span></div>
+      </div>
+    </sc-if>
+    <footer style="margin-top:auto;display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--gray-6);font-size:12px;color:var(--text-secondary)"><span>HealthDiskInfo · {{ rid }} · Los estados se indican con ícono y texto.</span><span style="white-space:nowrap;flex:none">Página {{ total }} de {{ total }}</span></footer>
+  </section>
+
+</doc-page>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;disk&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;disk4&quot;,&quot;disk6&quot;,&quot;disk8&quot;,&quot;disk5&quot;,&quot;disk7&quot;,&quot;disk0&quot;],&quot;default&quot;:&quot;disk4&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;paper&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;letter&quot;,&quot;a4&quot;],&quot;default&quot;:&quot;letter&quot;,&quot;tsType&quot;:&quot;'letter' | 'a4'&quot;}}">
+const nf = (n, d = 0) => Number(n).toLocaleString('es-MX', { minimumFractionDigits: d, maximumFractionDigits: d });
+const VER = { optimal: ['Óptimo', '#i-shield-check'], good: ['Bueno', '#i-check-circle'], warning: ['Atención', '#i-alert'], critical: ['Crítico', '#i-octagon'], nodata: ['Sin datos', '#i-circle-dashed'] };
+const hv = (v, k) => 'var(--health-' + v + '-' + k + ')';
+const ALL = ['summary', 'identity', 'smart', 'temp', 'tests', 'logs', 'appendix'];
+
+class Component extends DCLogic {
+  state = { p: this.parse(), sha: 'calculando…', ready: !!window.HDI_MOCK };
+  parse() {
+    const q = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+    const pr = this.props || {};
+    return { disk: q.get('disk') || pr.disk || 'disk4', paper: q.get('paper') || pr.paper || 'letter', s: (q.get('s') || ALL.join(',')).split(',').filter(Boolean),
+      tech: q.get('tech') || 'Andrea Castillo', client: q.get('client') || 'Inventario · lote 38', notes: q.get('notes') || '', mask: q.get('mask') !== '0', id: q.get('id') || 'HDI-20260924-0143' };
+  }
+  componentDidMount() {
+    this.onHash = () => { this.setState({ p: this.parse() }, () => this.hash()); };
+    window.addEventListener('hashchange', this.onHash);
+    const w = setInterval(() => { if (window.HDI_MOCK) { clearInterval(w); this.setState({ ready: true }, () => this.hash()); } }, 30);
+  }
+  componentDidUpdate() { const pr = this.props || {}; const k = pr.disk + '|' + pr.paper; if (this._pk !== undefined && this._pk !== k && !location.hash) this.setState({ p: this.parse() }, () => this.hash()); this._pk = k; }
+  componentWillUnmount() { window.removeEventListener('hashchange', this.onHash); }
+  async hash() {
+    try { const d = this.disk(); const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(d))); this.setState({ sha: [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('') }); }
+    catch (e) { this.setState({ sha: 'e3b7a1f09c4d2e6b58f1a0c7d93e24b6f8a1c5d7e9b3f2a4c6d8e0f1a2b3c4d5' }); }
+  }
+  disk() { return window.HDI_MOCK.disks.find(x => x.id === this.state.p.disk) || window.HDI_MOCK.disks[0]; }
+  series(d) {
+    const sc = window.HDI_MOCK.scans[d.id]; const out = [];
+    if (sc) { for (let i = 0; i <= 120; i++) { const p = i / 120; out.push(Math.round(d.temp + (sc.maxTemp - d.temp) * (1 - Math.exp(-p * 3.2)) / (1 - Math.exp(-3.2)) + Math.sin(i * 0.9) * 0.6)); } return { pts: out, x1: sc.durationText, caption: 'Durante el escaneo de lectura completo' }; }
+    for (let i = 0; i <= 120; i++) out.push(Math.round(d.temp + Math.sin(i / 9) * 1.2 + Math.sin(i * 1.7) * 0.5)); return { pts: out, x1: '15 min', caption: 'Monitoreo de 15 min' };
+  }
+  renderVals() {
+    const P = this.state.p, has = k => P.s.includes(k);
+    const base = { paper: P.paper === 'a4' ? 'a4' : 'letter', rid: P.id, date: '24 sep 2026, 11:02', tech: P.tech, client: P.client, notes: P.notes, hasNotes: !!P.notes.trim(), sha: this.state.sha };
+    if (!window.HDI_MOCK) return { ...base, d: {}, v: {}, ring: {}, metrics: [], identity: [], smartRows: [], flags: [], temp: {}, scan: {}, logs: {}, recs: [], cmds: [] };
+    const M = window.HDI_MOCK, d = this.disk(), nd = !!d.nodata, vb = VER[d.verdict];
+    const cap = nf(d.capacityTB, d.capacityTB % 1 ? 1 : 0) + ' TB';
+    const r = 53, c = 2 * Math.PI * r;
+    const stK = k => ({ ok: ['Normal', '#i-check-circle', 'var(--text-secondary)'], note: ['Nota', '#i-info', 'var(--text-secondary)'], warn: ['Atención', '#i-alert', 'var(--gray-12)'], crit: ['Crítico', '#i-octagon', 'var(--gray-12)'] }[k]);
+    const spareK = d.spare < d.spareTh ? 'crit' : (d.spare < 100 && d.spare - d.spareTh <= 10) ? 'warn' : 'ok', medK = d.mediaErr >= 10 ? 'crit' : d.mediaErr ? 'warn' : 'ok';
+    const metric = (label, value, k) => { const s = stK(k); return { label, value, st: s[0], icon: s[1], fg: s[2] }; };
+    const metrics = nd ? [] : [metric('Vida útil restante', d.life + ' %', d.life <= 20 ? 'warn' : 'ok'), metric('Repuesto (umbral ' + d.spareTh + ' %)', d.spare + ' %', spareK), metric('Datos escritos', d.writtenText, 'ok'), metric('Datos leídos', d.readText, 'ok'),
+      metric('Horas (≈' + nf(Math.round(d.hours / 24)) + ' días)', nf(d.hours) + ' h', 'ok'), metric('Ciclos · apagados inseguros', nf(d.cycles) + ' · ' + nf(d.unsafe), d.unsafe ? 'note' : 'ok'), metric('Errores de medios', nf(d.mediaErr), medK), metric('Temperatura', d.temp + ' °C', 'ok')];
+    const serial = d.serial ? (P.mask ? d.serial.slice(0, 6) + '•'.repeat(Math.max(4, d.serial.length - 6)) : d.serial) : '—';
+    const identity = [['Modelo', d.model], ['Número de serie', serial, 1], ['Firmware', d.fw || '—', 1], ['Proveedor PCI', d.pciVendor || '—'], ['Versión NVMe', d.nvme || '—'], ['Capacidad', nf(d.bytes) + ' B'], ['Bloque lógico', d.lbaSize ? nf(d.lbaSize) + ' B' : '—'], ['Namespaces', d.namespaces != null ? String(d.namespaces) : '—'], ['Conexión', d.connLabel + ' · ' + d.link], ['Puente o gabinete', d.bridge || (d.internal ? 'Integrado' : '—')], ['Identificador', d.id, 1], ['OUI IEEE', d.oui || '—', 1]]
+      .map(x => ({ k: x[0], v: x[1], font: x[2] ? 'var(--font-mono)' : 'inherit' }));
+    const row = (name, val, raw, k, strong) => { const s = stK(k); return { name, val, raw, st: s[0], icon: s[1], fg: s[2], w: strong || k === 'crit' || k === 'warn' ? 600 : 400, bg: k === 'crit' || k === 'warn' ? 'var(--gray-3)' : 'transparent' }; };
+    const smartRows = nd ? [] : [
+      row('Vida útil restante', d.life + ' %', 'percentage_used = ' + d.used, d.life <= 20 ? 'warn' : 'ok'), row('Repuesto disponible', d.spare + ' %', 'available_spare = ' + d.spare, spareK), row('Umbral de repuesto', d.spareTh + ' %', 'available_spare_threshold = ' + d.spareTh, 'ok'),
+      row('Datos escritos', d.writtenText, 'data_units_written = ' + nf(d.duWritten), 'ok'), row('Datos leídos', d.readText, 'data_units_read = ' + nf(d.duRead), 'ok'), row('Comandos de escritura', nf(d.hostWrites), 'host_writes', 'ok'), row('Comandos de lectura', nf(d.hostReads), 'host_reads', 'ok'), row('Tiempo ocupado del controlador', nf(d.busy) + ' min', 'controller_busy_time', 'ok'),
+      row('Estado SMART general', d.critWarn ? 'Fallido' : 'Aprobado', 'smart_status.passed = ' + !d.critWarn, d.critWarn ? 'crit' : 'ok'), row('Advertencia crítica', '0x' + d.critWarn.toString(16).padStart(2, '0').toUpperCase(), 'critical_warning = ' + d.critWarn, d.critWarn ? 'crit' : 'ok'), row('Errores de medios', nf(d.mediaErr), 'media_errors = ' + d.mediaErr, medK), row('Entradas en el log de errores', d.errLogUnavailable ? 'No disponible' : nf(d.errLog), 'num_err_log_entries', d.errLog > 0 ? 'note' : 'ok'),
+      row('Temperatura', d.temp + ' °C', 'temperature = ' + (d.temp + 273) + ' K', 'ok'), ...(d.sensors || []).map((v, i) => row('Sensor ' + (i + 1), v + ' °C', 'temperature_sensors[' + i + ']', 'ok')), row('Umbral de advertencia' + (d.estThresholds ? ' (estimado)' : ''), d.warnT + ' °C', 'wctemp', d.estThresholds ? 'note' : 'ok'), row('Umbral crítico' + (d.estThresholds ? ' (estimado)' : ''), d.critT + ' °C', 'cctemp', d.estThresholds ? 'note' : 'ok'),
+      row('Tiempo sobre advertencia', nf(d.warnTime) + ' min', 'warning_temp_time', d.warnTime ? 'note' : 'ok'), row('Tiempo sobre crítica', nf(d.critTime) + ' min', 'critical_comp_time', d.critTime ? 'warn' : 'ok'),
+      row('Horas de encendido', nf(d.hours) + ' h', 'power_on_hours', 'ok'), row('Ciclos de encendido', nf(d.cycles), 'power_cycles', 'ok'), row('Apagados inseguros', nf(d.unsafe), 'unsafe_shutdowns', d.unsafe ? 'note' : 'ok')];
+    const flags = ['Repuesto bajo el umbral', 'Temperatura fuera de rango', 'Fiabilidad degradada', 'Modo solo lectura', 'Falla del respaldo de memoria volátil', 'Memoria persistente no confiable'].map((l, i) => { const on = !nd && !!(d.critWarn & (1 << i)); return { label: l, state: on ? 'Activa' : 'Inactiva', icon: on ? '#i-x' : '#i-check', fg: 'var(--gray-12)', w: on ? 700 : 400 }; });
+    // temperature
+    const se = this.series(d), top = Math.ceil((d.critT || 80) / 10) * 10 + 5, bot = 20, y = v => 150 - (v - bot) / (top - bot) * 140;
+    const tPath = nd ? '' : se.pts.map((v, i) => (i ? 'L' : 'M') + (40 + i * 656 / 120).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+    const ticks = []; for (let v = bot; v <= top; v += 20) ticks.push({ y: y(v).toFixed(1), top: (y(v) / 170 * 100).toFixed(2) + '%', label: v + ' °C' });
+    const mn = Math.min(...se.pts), mx = Math.max(...se.pts), av = se.pts.reduce((a, b) => a + b, 0) / se.pts.length;
+    const temp = { path: tPath, ticks, yWarn: y(d.warnT || 70).toFixed(1), yCrit: y(d.critT || 80).toFixed(1), hWarn: (y(d.warnT || 70) - y(d.critT || 80)).toFixed(1), lwTop: ((y(d.warnT || 70) - 2) / 170 * 100).toFixed(2) + '%', warnLbl: 'Advertencia ' + d.warnT + ' °C · crítica ' + d.critT + ' °C' + (d.estThresholds ? ' (estimados)' : ''), x0: '0:00', x1: se.x1, caption: se.caption,
+      stats: nd ? 'Sin datos de temperatura (SMART no disponible).' : 'Mínima ' + mn + ' °C · máxima ' + mx + ' °C · promedio ' + nf(av, 1) + ' °C · historial del disco: ' + nf(d.warnTime) + ' min sobre advertencia, ' + nf(d.critTime) + ' min sobre crítica.' };
+    // scan
+    const sc = M.scans[d.id]; let scan = { has: false, none: true, result: 'Sin escaneo', icon: '#i-info', fg: 'var(--text-secondary)', stats: [], ticks: [], diff: [], zones: [], marks: [] };
+    if (sc) {
+      const ys = v => 110 - v / 3200 * 100, pts = []; for (let i = 0; i <= 300; i++) { const q = i / 300; let v = sc.avg + Math.sin(q * 37) * 70 + Math.sin(q * 113) * 45; if (d.id === 'disk5') v = 1900 + Math.sin(q * 29) * 260; if (sc.zones.some(z => Math.abs(z[0] - q) < 0.004)) v = 40; pts.push((i ? 'L' : 'M') + (40 + q * 656).toFixed(1) + ' ' + ys(Math.max(sc.min, Math.min(sc.max, v))).toFixed(1)); }
+      const ok = sc.result === 'passed';
+      scan = { has: true, none: false, result: ok ? 'Aprobado' : 'Con errores', icon: ok ? '#i-check-circle' : '#i-alert', fg: 'var(--gray-12)', path: pts.join(' '),
+        ticks: [0, 1000, 2000, 3000].map(v => ({ y: ys(v).toFixed(1), top: (ys(v) / 130 * 100).toFixed(2) + '%', label: nf(v) })),
+        stats: [['Duración', sc.durationText], ['Promedio', nf(sc.avg) + ' MB/s'], ['Mínima', nf(sc.min) + ' MB/s'], ['Máxima', nf(sc.max) + ' MB/s'], ['Temp. máxima', sc.maxTemp + ' °C'], ['Zonas ilegibles', String(sc.zones.length)]].map(x => ({ k: x[0], v: x[1] })),
+        zones: sc.zones.map(z => 'LBA ' + z[1] + '–' + z[2]), hasZones: sc.zones.length > 0, marks: sc.zones.map(z => { const x = 40 + z[0] * 656; return { d: 'M' + (x - 4).toFixed(1) + ' 118 L' + (x + 4).toFixed(1) + ' 118 L' + x.toFixed(1) + ' 111 Z' }; }),
+        diff: [['Datos leídos', 'read'], ['Comandos de lectura', 'hostReads'], ['Temperatura', 'temp'], ['Errores de medios', 'media'], ['Entradas en el log de errores', 'errLog'], ['Repuesto disponible', 'spare'], ['Horas de encendido', 'hours']].map(([k, key]) => { const a = sc.before[key], b = sc.after[key], ch = a !== b; return { k, a, b, ch: ch ? '↑ cambió' : '= sin cambio', w: ch ? 700 : 400 }; }) };
+    }
+    // logs
+    const logs = { hasErr: (d.errors || []).length > 0, err: (d.errors || []).map(e => ({ n: e[0], c: nf(+e[1]), q: e[2], cmd: e[3], s: e[4], lba: e[5], ns: e[6] })),
+      errNote: nd ? 'No disponible (SMART no disponible por USB).' : d.errLogUnavailable ? 'Lectura parcial: este disco no permite leer el log de errores (GetLogPage falló).' : (d.errors || []).length === 0 ? 'Sin errores registrados.' : d.errLog > d.errors.length ? 'Se muestran las ' + d.errors.length + ' entradas más recientes de ' + nf(d.errLog) + '.' : '',
+      st: (d.selftests || []).map(x => ({ t: x.type + ' · ' + x.result + ' · a las ' + nf(x.hours) + ' h' + (x.lba !== '—' ? ' · LBA ' + x.lba : ''), icon: x.ok ? '#i-check-circle' : '#i-alert' })).concat(d.selftestUnsupported || nd ? [{ t: nd ? 'No disponible.' : 'Este disco no admite autopruebas.', icon: '#i-info' }] : []) };
+    const recs = { optimal: ['El disco está en excelente estado. No se requiere ninguna acción.', 'Vuelve a revisarlo en 6 meses o antes de cualquier transferencia importante.'], good: ['Desgaste moderado: el disco es apto para uso general.', 'Revisa la salud cada 3 meses y mantén respaldos al día.'], warning: ['Planifica el reemplazo del disco en las próximas semanas.', 'Respalda tus datos y no lo uses como único almacenamiento.'], critical: ['Respalda tus datos lo antes posible.', 'Reemplaza el disco: el repuesto está por debajo del umbral y la fiabilidad está degradada.', 'No lo uses para datos importantes ni lo revendas como disco en buen estado.'], nodata: ['No fue posible evaluar la salud: el puente USB no transmite SMART en macOS.', 'Repite la revisión con un gabinete Thunderbolt o USB4.'] }[d.verdict].slice();
+    if (!nd && d.unsafe > 50) recs.push(nf(d.unsafe) + ' apagados inseguros: expulsa el disco antes de desconectarlo.');
+    if (!nd && d.warnTime > 0) recs.push(nf(d.warnTime) + ' min históricos sobre la temperatura de advertencia: considera un gabinete con disipador.');
+    const cmds = [['10:41:52', 'smartctl --scan-open -j', '0 · Sin problemas'], ['10:41:53', 'smartctl -x -j ' + d.id, (d.exit || 0) + ' · ' + (d.exit === 0 ? 'Sin problemas' : M.exitBits.filter(b => d.exit & b.bit).map(b => b.label).join(' + '))]].concat(sc ? [['10:42:10', 'hdi-scan --full /dev/r' + d.id, '0 · ' + (sc.result === 'passed' ? 'Aprobado' : 'Con errores')], ['10:54:01', 'smartctl -x -j ' + d.id, (d.exit || 0) + ' · instantánea posterior']] : []).map(x => ({ t: x[0], cmd: x[1], exit: x[2] }));
+    const showSmart = has('smart'), showP3 = has('temp') || has('tests');
+    const total = 2 + (showSmart ? 1 : 0) + (showP3 ? 1 : 0);
+    return {
+      ...base, d, cap, v: { label: vb[0], icon: vb[1], fg: 'var(--gray-12)', solid: 'var(--gray-12)', bg: 'var(--gray-2)' },
+      ring: { c: c.toFixed(2), off: (c * (1 - (nd ? 0 : d.life) / 100)).toFixed(2) }, lifeText: nd ? '—' : d.life + ' %', lifeCaption: nd ? 'sin datos' : 'vida útil',
+      metrics, identity, smartRows, flags, critHex: nd ? '—' : '0x' + d.critWarn.toString(16).padStart(2, '0').toUpperCase(), hasSmart: !nd, noSmart: nd,
+      temp, scan, logs, recs, cmds, appVersion: M.appVersion,
+      showSummary: has('summary') && !nd, showIdentity: has('identity'), showSmart, showP3, showTemp: has('temp'), showTests: has('tests'), showLogs: has('logs'), showAppendix: has('appendix'),
+      p4Title: has('logs') ? 'Registros, observaciones y apéndice' : 'Observaciones y apéndice',
+      pSmart: 2, pP3: showSmart ? 3 : 2, total
+    };
+  }
+}
+</script>
+</body>
+</html>

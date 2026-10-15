@@ -1,0 +1,7 @@
+/* Estilos globales de la plantilla (bloque <helmet> de prototype-design/Report Template.dc.html). */
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--font-sans);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;color:var(--text-primary)}
+doc-page:not(:defined){visibility:hidden}
+a{color:var(--accent-fg);text-decoration:none}
+a:hover{text-decoration:underline}
+html[data-capture] body{background:#fff}

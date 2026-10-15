@@ -1,0 +1,34 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      5
+    ],
+    "pre_release": false,
+    "svn_revision": "5714",
+    "platform_info": "Darwin 27.0.0 arm64",
+    "build_info": "(local build)",
+    "argv": [
+      "smartctl",
+      "-l",
+      "selftest",
+      "-j",
+      "disk0"
+    ],
+    "exit_status": 0
+  },
+  "local_time": {
+    "time_t": 1790274474,
+    "asctime": "Thu Sep 24 12:27:54 2026 UTC"
+  },
+  "device": {
+    "name": "disk0",
+    "info_name": "disk0",
+    "type": "nvme",
+    "protocol": "NVMe"
+  }
+}

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Preguntas y dudas de uso
+    url: https://github.com/chavahdez92/nvitals-drive/discussions
+    about: Para preguntas, usa Discussions.
+  - name: Reportar una vulnerabilidad
+    url: https://github.com/chavahdez92/nvitals-drive/security/advisories/new
+    about: Nunca en público. Sigue SECURITY.md.

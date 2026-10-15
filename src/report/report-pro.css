@@ -1,0 +1,131 @@
+/* Reporte de salud de SSD — diseño de impresión (Carta/A4).
+   Usa los tokens del sistema de diseño (tema claro). Todo estado lleva ícono + texto,
+   así el documento se lee también impreso en blanco y negro. */
+
+.rp { color: var(--gray-12); font-family: var(--font-sans); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+.rp .page { padding: 0.5in 0.58in 0.42in; display: flex; flex-direction: column; gap: 18px; height: 100%; background: #fff; }
+.rp * { box-sizing: border-box; }
+.rp svg { flex: none; }
+.rp .mono { font-family: var(--font-mono); }
+
+/* Encabezado de marca (página 1) */
+.rp-brand { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.rp-brand__id { display: flex; align-items: center; gap: 10px; }
+.rp-brand__id img { width: 34px; height: 34px; display: block; }
+.rp-brand__id--logo { flex-direction: column; align-items: flex-start; gap: 4px; }
+/* Logo horizontal NVitals Drive (1544 × 314): alto fijo, ancho proporcional. */
+.rp-brand__id img.rp-logo, .rq-head__id img.rp-logo { width: auto; height: 30px; display: block; }
+.rp-brand__name { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; }
+.rp-brand__org { font-size: 11px; color: var(--gray-10); }
+.rp-brand__doc { text-align: right; font-size: 10.5px; color: var(--gray-10); line-height: 15px; }
+.rp-brand__doc strong { display: block; font-family: var(--font-mono); font-size: 12px; color: var(--gray-12); font-weight: 600; letter-spacing: 0.01em; }
+.rp-rule { height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--accent) 0 72px, var(--gray-4) 72px); }
+
+.rp-title h1 { margin: 0; font-family: var(--font-display); font-size: 27px; line-height: 31px; font-weight: 750; letter-spacing: -0.025em; }
+.rp-title p { margin: 4px 0 0; font-size: 13px; color: var(--gray-10); }
+
+.rp-meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--gray-5); border-radius: 10px; overflow: hidden; }
+.rp-meta > div { padding: 9px 12px; border-left: 1px solid var(--gray-5); min-width: 0; }
+.rp-meta > div:first-child { border-left: 0; }
+.rp-meta span { display: block; font-size: 9.5px; font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-9); }
+.rp-meta b { display: block; margin-top: 3px; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Veredicto */
+.rp-verdict { position: relative; display: grid; grid-template-columns: 116px minmax(0, 1fr) 190px; gap: 20px; align-items: center; padding: 18px 20px 18px 26px; border-radius: 12px; background: var(--v-bg); border: 1px solid var(--v-border); overflow: hidden; }
+.rp-verdict::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--v-solid); }
+.rp-ring { position: relative; width: 116px; height: 116px; }
+.rp-ring svg { transform: rotate(-90deg); display: block; }
+.rp-ring__val { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.rp-ring__val b { font-size: 29px; line-height: 30px; font-weight: 750; letter-spacing: -0.03em; }
+.rp-ring__val b small { font-size: 15px; font-weight: 600; margin-left: 1px; }
+.rp-ring__val span { font-size: 10.5px; color: var(--gray-10); margin-top: 2px; }
+.rp-verdict__label { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 7px; border-radius: 999px; background: var(--v-solid); color: #fff; font-size: 12.5px; font-weight: 700; letter-spacing: 0.01em; }
+.rp-verdict__label svg { color: #fff; }
+.rp-verdict__text { margin: 10px 0 0; font-size: 14.5px; line-height: 21px; font-weight: 500; text-wrap: pretty; }
+.rp-verdict__sub { margin-top: 8px; font-size: 11px; color: var(--gray-10); }
+.rp-facts { display: flex; flex-direction: column; gap: 0; border-left: 1px solid var(--v-border); padding-left: 16px; }
+.rp-facts div { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 5px 0; border-bottom: 1px dashed var(--v-border); }
+.rp-facts div:last-child { border-bottom: 0; }
+.rp-facts span { font-size: 11px; color: var(--gray-10); }
+.rp-facts b { font-size: 13.5px; font-weight: 650; }
+
+/* Secciones */
+.rp-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 8px; }
+.rp-h h2 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; letter-spacing: -0.005em; }
+.rp-h h2::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+.rp-h small { font-size: 10.5px; color: var(--gray-9); }
+
+/* Métricas */
+.rp-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.rp-metric { padding: 10px 12px 11px; border: 1px solid var(--gray-5); border-radius: 9px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.rp-metric span { font-size: 10px; color: var(--gray-10); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rp-metric b { font-size: 18px; line-height: 21px; font-weight: 700; letter-spacing: -0.015em; }
+
+/* Píldoras de estado */
+.rp-pill { display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; padding: 1px 7px 1px 5px; border-radius: 999px; font-size: 10px; font-weight: 650; line-height: 15px; white-space: nowrap; }
+.rp-pill svg { width: 10px; height: 10px; }
+.rp-pill.ok { background: var(--health-optimal-bg); color: var(--health-optimal-fg); }
+.rp-pill.note { background: var(--gray-3); color: var(--gray-11); }
+.rp-pill.warn { background: var(--health-warning-bg); color: var(--health-warning-fg); }
+.rp-pill.crit { background: var(--health-critical-bg); color: var(--health-critical-fg); }
+
+/* Tablas */
+.rp-dl { display: grid; grid-template-columns: 1fr 1fr; column-gap: 22px; }
+.rp-dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px solid var(--gray-4); font-size: 11.5px; min-width: 0; }
+.rp-dl span { color: var(--gray-10); flex: none; }
+.rp-dl b { font-weight: 550; text-align: right; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.rp-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.rp-table th { text-align: left; font-size: 9.5px; font-weight: 650; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gray-9); padding: 0 8px 5px; border-bottom: 1.5px solid var(--gray-12); }
+.rp-table td { padding: 4px 8px; border-bottom: 1px solid var(--gray-4); vertical-align: middle; }
+.rp-table th:first-child, .rp-table td:first-child { padding-left: 0; }
+.rp-table th:last-child, .rp-table td:last-child { padding-right: 0; }
+.rp-table .num { text-align: right; font-weight: 600; white-space: nowrap; }
+.rp-table .raw { font-family: var(--font-mono); font-size: 9.5px; color: var(--gray-9); white-space: nowrap; }
+.rp-table tr.group td { padding-top: 9px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-fg); border-bottom: 1px solid var(--gray-5); }
+.rp-table tr.hl td { background: var(--health-critical-bg); }
+.rp-table tr.hlw td { background: var(--health-warning-bg); }
+
+.rp-flags { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.rp-flag { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 7px; border: 1px solid var(--gray-5); font-size: 10.5px; }
+.rp-flag small { margin-left: auto; font-size: 9.5px; color: var(--gray-9); }
+.rp-flag.on { border-color: var(--health-critical-border); background: var(--health-critical-bg); color: var(--health-critical-fg); font-weight: 650; }
+.rp-flag.on small { color: var(--health-critical-fg); }
+
+/* Gráficos */
+.rp-chart { position: relative; border: 1px solid var(--gray-5); border-radius: 9px; padding: 10px 12px 8px; }
+.rp-chart__axis { position: absolute; left: 12px; font-size: 9px; color: var(--gray-9); transform: translateY(-50%); }
+.rp-chart__foot { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--gray-9); padding: 2px 0 0 40px; }
+.rp-chart__legend { position: absolute; right: 14px; top: 8px; display: flex; gap: 10px; font-size: 9.5px; color: var(--gray-10); }
+.rp-chart__legend i { display: inline-block; width: 12px; height: 0; border-top: 1.5px dashed var(--health-warning-solid); margin-right: 4px; vertical-align: middle; }
+.rp-chart__legend i.crit { border-top-color: var(--health-critical-solid); }
+.rp-note { font-size: 10.5px; color: var(--gray-10); margin-top: 6px; line-height: 15px; }
+
+.rp-stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border: 1px solid var(--gray-5); border-radius: 9px; overflow: hidden; }
+.rp-stats > div { padding: 8px 10px; border-left: 1px solid var(--gray-5); }
+.rp-stats > div:first-child { border-left: 0; }
+.rp-stats span { display: block; font-size: 9.5px; color: var(--gray-9); }
+.rp-stats b { display: block; margin-top: 2px; font-size: 13px; font-weight: 700; }
+
+.rp-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 1px 18px; font-family: var(--font-mono); font-size: 9.5px; color: var(--health-critical-fg); }
+
+.rp-result { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; }
+
+/* Recomendaciones, notas y firma */
+.rp-callout { border-radius: 10px; background: var(--v-bg); border: 1px solid var(--v-border); padding: 12px 14px; }
+.rp-callout ol { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 11.5px; line-height: 16px; }
+.rp-box { border: 1px solid var(--gray-5); border-radius: 9px; padding: 10px 12px; font-size: 11.5px; line-height: 16px; white-space: pre-wrap; }
+.rp-sha { font-family: var(--font-mono); font-size: 9.5px; word-break: break-all; padding: 7px 10px; border-radius: 7px; background: var(--gray-2); border: 1px solid var(--gray-4); }
+.rp-sign { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 24px; margin-top: 4px; }
+.rp-sign div { border-top: 1px solid var(--gray-12); padding-top: 4px; font-size: 10px; color: var(--gray-10); }
+.rp-sign b { display: block; font-size: 11.5px; color: var(--gray-12); font-weight: 600; min-height: 16px; }
+
+/* Encabezado corrido y pie */
+.rp-run { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-5); font-size: 10.5px; color: var(--gray-10); }
+.rp-run__l { display: flex; align-items: center; gap: 8px; }
+.rp-run__l img { width: 18px; height: 18px; }
+.rp-run b { color: var(--gray-12); font-weight: 650; }
+.rp-foot { margin-top: auto; display: flex; justify-content: space-between; gap: 12px; padding-top: 8px; border-top: 1px solid var(--gray-5); font-size: 9.5px; color: var(--gray-9); }
+.rp-foot b { color: var(--gray-11); font-weight: 600; }
+.rp-dl--one { grid-template-columns: 1fr; }
+.rp-dl--one b { white-space: normal; }

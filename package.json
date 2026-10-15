@@ -1,0 +1,61 @@
+{
+  "name": "nvitals-drive",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Diagnóstico de salud de SSD NVMe con smartctl: app de escritorio con Tauri 2 y React.",
+  "license": "MIT OR Apache-2.0",
+  "author": "Salvador Hernández",
+  "homepage": "https://github.com/chavahdez92/nvitals-drive",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chavahdez92/nvitals-drive.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chavahdez92/nvitals-drive/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/with-cargo.mjs tauri dev",
+    "dev:vite": "vite",
+    "dev:web": "vite --mode mock",
+    "build": "node scripts/with-cargo.mjs tauri build",
+    "build:web": "vite build",
+    "convert:design": "node scripts/dc2tsx.mjs",
+    "sync:design": "node scripts/sync-design.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:rust": "node scripts/with-cargo.mjs --cwd src-tauri cargo test",
+    "check": "pnpm typecheck && pnpm test && pnpm test:rust",
+    "tauri": "node scripts/with-cargo.mjs tauri",
+    "parity": "node e2e/parity.mjs",
+    "lint:rust": "node scripts/with-cargo.mjs --cwd src-tauri cargo clippy --all-targets -- -D warnings",
+    "fmt:rust": "node scripts/with-cargo.mjs --cwd src-tauri cargo fmt",
+    "anonymize": "node scripts/anonymize-fixture.mjs",
+    "notices": "node scripts/with-cargo.mjs node scripts/third-party-notices.mjs"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/plugin-dialog": "^2.7.3",
+    "@tauri-apps/plugin-notification": "^2.4.0",
+    "@tauri-apps/plugin-opener": "^2.5.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "htmlparser2": "^12.0.0",
+    "pixelmatch": "^7.2.0",
+    "playwright": "^1.63.0",
+    "pngjs": "^7.0.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "packageManager": "pnpm@12.4.1"
+}

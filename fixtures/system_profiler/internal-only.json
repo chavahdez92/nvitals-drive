@@ -1,0 +1,94 @@
+{
+  "SPNVMeDataType": [
+    {
+      "_items": [
+        {
+          "_name": "APPLE SSD AP1024Z",
+          "bsd_name": "disk0",
+          "detachable_drive": "no",
+          "device_model": "APPLE SSD AP1024Z",
+          "device_revision": "241.0.12",
+          "partition_map_type": "guid_partition_map_type",
+          "removable_media": "no",
+          "size": "1 TB",
+          "size_in_bytes": 1000555581440,
+          "smart_status": "Verified",
+          "spnvme_trim_support": "Yes"
+        }
+      ],
+      "_name": "Apple SSD Controller"
+    }
+  ],
+  "SPThunderboltDataType": [
+    {
+      "_name": "thunderboltusb4_bus_2",
+      "device_name_key": "MacBook Pro",
+      "domain_uuid_key": "32AF278B-C89D-5FB0-13EB-3906F32AF023",
+      "receptacle_1_tag": {
+        "current_speed_key": "Up to 120 Gb/s",
+        "link_status_key": "0x100",
+        "receptacle_id_key": "3",
+        "receptacle_status_key": "receptacle_no_devices_connected"
+      },
+      "route_string_key": "0",
+      "switch_uid_key": "0x87BCD6A7ED76FDA7",
+      "vendor_name_key": "Apple Inc."
+    },
+    {
+      "_name": "thunderboltusb4_bus_1",
+      "device_name_key": "MacBook Pro",
+      "domain_uuid_key": "21512CBC-7881-63E4-0D34-6E63B7BA5FC6",
+      "receptacle_1_tag": {
+        "current_speed_key": "Up to 120 Gb/s",
+        "link_status_key": "0x100",
+        "micro_version_key": "0.0.0",
+        "receptacle_id_key": "2",
+        "receptacle_status_key": "receptacle_no_devices_connected"
+      },
+      "route_string_key": "0",
+      "switch_uid_key": "0x08AAE8B3CA00CAD2",
+      "vendor_name_key": "Apple Inc."
+    },
+    {
+      "_name": "thunderboltusb4_bus_0",
+      "device_name_key": "MacBook Pro",
+      "domain_uuid_key": "ADCCC4C1-DB45-7CA4-41C7-D67355C3CBF3",
+      "receptacle_1_tag": {
+        "current_speed_key": "Up to 120 Gb/s",
+        "link_status_key": "0x100",
+        "micro_version_key": "0.0.0",
+        "receptacle_id_key": "1",
+        "receptacle_status_key": "receptacle_no_devices_connected"
+      },
+      "route_string_key": "0",
+      "switch_uid_key": "0x54BAF3A6AF65BBF0",
+      "vendor_name_key": "Apple Inc."
+    }
+  ],
+  "SPUSBHostDataType": [
+    {
+      "_name": "USB 4.0 Bus",
+      "Driver": "AppleT6050USBXHCIAUSS",
+      "USBKeyHardwareType": "Built-in",
+      "USBKeyLocationID": "0x08000000"
+    },
+    {
+      "_name": "USB 3.1 Bus",
+      "Driver": "AppleT8142USBXHCI",
+      "USBKeyHardwareType": "Built-in",
+      "USBKeyLocationID": "0x02000000"
+    },
+    {
+      "_name": "USB 3.1 Bus",
+      "Driver": "AppleT8142USBXHCI",
+      "USBKeyHardwareType": "Built-in",
+      "USBKeyLocationID": "0x00000000"
+    },
+    {
+      "_name": "USB 3.1 Bus",
+      "Driver": "AppleT8142USBXHCI",
+      "USBKeyHardwareType": "Built-in",
+      "USBKeyLocationID": "0x01000000"
+    }
+  ]
+}

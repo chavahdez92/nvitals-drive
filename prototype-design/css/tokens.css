@@ -1,0 +1,223 @@
+/* HealthDiskInfo — design tokens (dark-first; light is first-class).
+   Theme: [data-theme="dark"|"light"|"system"] on the app root. Colors use light-dark() driven by color-scheme.
+   Motion: [data-motion="system"|"reduced"|"full"], global speed via --motion-k (1 = 1×, 2 = 0.5×, 4 = 0.25×). */
+
+:root, [data-theme] { color-scheme: light dark; }
+[data-theme="dark"] { color-scheme: dark; }
+[data-theme="light"] { color-scheme: light; }
+
+:root, [data-theme] {
+  /* ── Neutrals: cool graphite, 12 steps ── */
+  --gray-1:  light-dark(oklch(0.990 0.002 255), oklch(0.155 0.006 255));
+  --gray-2:  light-dark(oklch(0.972 0.003 255), oklch(0.185 0.007 255));
+  --gray-3:  light-dark(oklch(0.950 0.004 255), oklch(0.215 0.008 255));
+  --gray-4:  light-dark(oklch(0.925 0.005 255), oklch(0.245 0.009 255));
+  --gray-5:  light-dark(oklch(0.895 0.006 255), oklch(0.280 0.010 255));
+  --gray-6:  light-dark(oklch(0.855 0.007 255), oklch(0.325 0.011 255));
+  --gray-7:  light-dark(oklch(0.790 0.009 255), oklch(0.385 0.012 255));
+  --gray-8:  light-dark(oklch(0.700 0.010 255), oklch(0.470 0.012 255));
+  --gray-9:  light-dark(oklch(0.560 0.012 255), oklch(0.600 0.012 255));
+  --gray-10: light-dark(oklch(0.470 0.012 255), oklch(0.690 0.010 255));
+  --gray-11: light-dark(oklch(0.370 0.012 255), oklch(0.800 0.008 255));
+  --gray-12: light-dark(oklch(0.200 0.010 255), oklch(0.960 0.004 255));
+
+  /* ── Surfaces ── */
+  --surface-content: light-dark(oklch(0.990 0.002 255), oklch(0.185 0.007 255));
+  --surface-raised:  light-dark(oklch(1 0 0), oklch(0.225 0.008 255));
+  --surface-raised-2:light-dark(oklch(0.975 0.003 255), oklch(0.255 0.009 255));
+  --surface-sunken:  light-dark(oklch(0.955 0.004 255), oklch(0.160 0.006 255));
+  --surface-hover:   light-dark(oklch(0.2 0.01 255 / 0.045), oklch(1 0 0 / 0.055));
+  --surface-pressed: light-dark(oklch(0.2 0.01 255 / 0.08), oklch(1 0 0 / 0.09));
+  --surface-selected:light-dark(oklch(0.55 0.12 225 / 0.12), oklch(0.80 0.12 215 / 0.14));
+  --surface-overlay: light-dark(oklch(0.2 0.01 255 / 0.22), oklch(0 0 0 / 0.45));
+  --surface-code:    light-dark(oklch(0.965 0.004 255), oklch(0.150 0.006 255));
+
+  /* ── Text ── */
+  --text-primary:   light-dark(oklch(0.200 0.010 255), oklch(0.960 0.004 255));
+  --text-secondary: light-dark(oklch(0.420 0.012 255), oklch(0.770 0.009 255));
+  --text-tertiary:  light-dark(oklch(0.505 0.012 255), oklch(0.650 0.011 255));
+  --text-disabled:  light-dark(oklch(0.700 0.010 255), oklch(0.470 0.012 255));
+  --text-on-accent: light-dark(oklch(1 0 0), oklch(0.180 0.030 225));
+
+  /* ── Borders ── */
+  --border-subtle:  light-dark(oklch(0.2 0.01 255 / 0.08), oklch(1 0 0 / 0.07));
+  --border-default: light-dark(oklch(0.2 0.01 255 / 0.13), oklch(1 0 0 / 0.11));
+  --border-strong:  light-dark(oklch(0.2 0.01 255 / 0.24), oklch(1 0 0 / 0.22));
+
+  /* ── Accent: "señal" cyan ── */
+  --accent:        light-dark(oklch(0.540 0.120 228), oklch(0.800 0.120 215));
+  --accent-hover:  light-dark(oklch(0.490 0.120 228), oklch(0.850 0.110 215));
+  --accent-pressed:light-dark(oklch(0.450 0.115 228), oklch(0.740 0.120 215));
+  --accent-fg:     light-dark(oklch(0.480 0.120 228), oklch(0.830 0.110 215));
+  --accent-soft:   light-dark(oklch(0.540 0.120 228 / 0.10), oklch(0.800 0.120 215 / 0.13));
+  --accent-border: light-dark(oklch(0.540 0.120 228 / 0.35), oklch(0.800 0.120 215 / 0.38));
+
+  /* ── Health: 5 states × fg / bg / border / solid (ring, dot, icon) ── */
+  --health-optimal-fg:     light-dark(oklch(0.450 0.120 152), oklch(0.830 0.150 152));
+  --health-optimal-bg:     light-dark(oklch(0.950 0.045 152), oklch(0.780 0.160 152 / 0.13));
+  --health-optimal-border: light-dark(oklch(0.800 0.090 152), oklch(0.780 0.160 152 / 0.32));
+  --health-optimal-solid:  light-dark(oklch(0.600 0.150 152), oklch(0.760 0.170 152));
+
+  --health-good-fg:        light-dark(oklch(0.460 0.110 128), oklch(0.870 0.150 122));
+  --health-good-bg:        light-dark(oklch(0.955 0.050 122), oklch(0.860 0.160 122 / 0.12));
+  --health-good-border:    light-dark(oklch(0.820 0.100 122), oklch(0.860 0.160 122 / 0.30));
+  --health-good-solid:     light-dark(oklch(0.660 0.150 125), oklch(0.850 0.170 122));
+
+  --health-warning-fg:     light-dark(oklch(0.500 0.120 62),  oklch(0.850 0.140 78));
+  --health-warning-bg:     light-dark(oklch(0.960 0.050 80),  oklch(0.820 0.150 78 / 0.13));
+  --health-warning-border: light-dark(oklch(0.830 0.110 78),  oklch(0.820 0.150 78 / 0.34));
+  --health-warning-solid:  light-dark(oklch(0.720 0.160 70),  oklch(0.820 0.160 75));
+
+  --health-critical-fg:    light-dark(oklch(0.510 0.190 27),  oklch(0.760 0.160 25));
+  --health-critical-bg:    light-dark(oklch(0.955 0.030 25),  oklch(0.660 0.200 25 / 0.16));
+  --health-critical-border:light-dark(oklch(0.800 0.100 25),  oklch(0.700 0.190 25 / 0.42));
+  --health-critical-solid: light-dark(oklch(0.580 0.210 27),  oklch(0.680 0.200 25));
+
+  --health-nodata-fg:      light-dark(oklch(0.470 0.012 255), oklch(0.720 0.010 255));
+  --health-nodata-bg:      light-dark(oklch(0.940 0.005 255), oklch(1 0 0 / 0.06));
+  --health-nodata-border:  light-dark(oklch(0.820 0.008 255), oklch(1 0 0 / 0.16));
+  --health-nodata-solid:   light-dark(oklch(0.700 0.010 255), oklch(0.500 0.012 255));
+
+  /* ── Data visualisation ── */
+  --data-temp:     light-dark(oklch(0.560 0.120 228), oklch(0.800 0.120 215));
+  --data-temp-2:   light-dark(oklch(0.520 0.140 295), oklch(0.760 0.120 295));
+  --data-read:     light-dark(oklch(0.560 0.120 228), oklch(0.800 0.120 215));
+  --data-write:    light-dark(oklch(0.520 0.140 295), oklch(0.760 0.120 295));
+  --data-speed:    light-dark(oklch(0.560 0.120 228), oklch(0.800 0.120 215));
+  --data-fill:     light-dark(oklch(0.560 0.120 228 / 0.10), oklch(0.800 0.120 215 / 0.12));
+  --data-warn:     var(--health-warning-solid);
+  --data-crit:     var(--health-critical-solid);
+  --band-warn:     light-dark(oklch(0.800 0.150 78 / 0.14), oklch(0.820 0.150 78 / 0.09));
+  --band-crit:     light-dark(oklch(0.650 0.200 25 / 0.12), oklch(0.680 0.200 25 / 0.11));
+  --chart-grid:    light-dark(oklch(0.2 0.01 255 / 0.07), oklch(1 0 0 / 0.06));
+  --chart-axis:    var(--text-tertiary);
+  --ring-track:    light-dark(oklch(0.2 0.01 255 / 0.08), oklch(1 0 0 / 0.08));
+
+  /* ── Syntax (JSON / console) ── */
+  --syn-key:    light-dark(oklch(0.480 0.120 228), oklch(0.820 0.100 215));
+  --syn-string: light-dark(oklch(0.470 0.110 152), oklch(0.820 0.120 152));
+  --syn-number: light-dark(oklch(0.520 0.140 295), oklch(0.800 0.110 295));
+  --syn-bool:   light-dark(oklch(0.520 0.120 62),  oklch(0.850 0.120 78));
+  --syn-punct:  var(--text-tertiary);
+
+  /* ── Traffic lights (window chrome) ── */
+  --tl-close: #ff5f57; --tl-min: #febc2e; --tl-zoom: #28c840; --tl-border: oklch(0 0 0 / 0.12);
+
+  /* ── Materials (translucent floating layers) ── */
+  --mat-window-bg:  light-dark(oklch(0.960 0.004 255 / 0.70), oklch(0.200 0.008 255 / 0.68));
+  --mat-window-filter: blur(32px) saturate(1.7);
+  --mat-toolbar-bg: light-dark(oklch(0.990 0.002 255 / 0.78), oklch(0.185 0.007 255 / 0.78));
+  --mat-toolbar-filter: blur(20px) saturate(1.5);
+  --mat-popover-bg: light-dark(oklch(0.995 0.002 255 / 0.86), oklch(0.245 0.009 255 / 0.86));
+  --mat-popover-filter: blur(24px) saturate(1.6);
+  --mat-sheet-bg:   light-dark(oklch(0.990 0.002 255 / 0.92), oklch(0.215 0.008 255 / 0.92));
+  --mat-sheet-filter: blur(24px) saturate(1.4);
+  --mat-edge-fade:  light-dark(oklch(0.990 0.002 255 / 0), oklch(0.185 0.007 255 / 0));
+
+  /* ── Typography ── */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, monospace;
+
+  --type-display-size: 34px;  --type-display-lh: 40px;  --type-display-weight: 700; --type-display-track: -0.022em;
+  --type-title1-size: 24px;   --type-title1-lh: 30px;   --type-title1-weight: 650; --type-title1-track: -0.016em;
+  --type-title2-size: 18px;   --type-title2-lh: 24px;   --type-title2-weight: 650; --type-title2-track: -0.010em;
+  --type-title3-size: 15px;   --type-title3-lh: 20px;   --type-title3-weight: 600; --type-title3-track: -0.005em;
+  --type-body-size: 13px;     --type-body-lh: 18px;     --type-body-weight: 400;   --type-body-track: -0.001em;
+  --type-callout-size: 12px;  --type-callout-lh: 16px;  --type-callout-weight: 400; --type-callout-track: 0em;
+  --type-note-size: 11px;     --type-note-lh: 14px;     --type-note-weight: 400;   --type-note-track: 0.005em;
+  --type-caption-size: 10px;  --type-caption-lh: 13px;  --type-caption-weight: 600; --type-caption-track: 0.04em;
+  --type-mono-size: 12px;     --type-mono-lh: 18px;     --type-mono-weight: 400;   --type-mono-track: 0em;
+  --type-metric-size: 22px;   --type-metric-lh: 26px;   --type-metric-weight: 600; --type-metric-track: -0.018em;
+
+  /* ── Space (4 px grid) ── */
+  --sp-0: 0px; --sp-0h: 2px; --sp-1: 4px; --sp-1h: 6px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-7: 28px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px;
+
+  /* ── Radii ── */
+  --r-xs: 4px; --r-sm: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-2xl: 20px; --r-window: 18px; --r-pill: 999px;
+
+  /* ── Sizes ── */
+  --size-titlebar: 52px; --size-traffic-zone-w: 80px; --size-sidebar: 244px; --size-control-sm: 22px;
+  --size-control-md: 28px; --size-control-lg: 34px; --size-row: 30px; --size-icon-sm: 14px; --size-icon-md: 16px; --size-icon-lg: 20px;
+
+  /* ── Elevation ── */
+  --shadow-color: light-dark(oklch(0.25 0.02 255 / 0.10), oklch(0 0 0 / 0.40));
+  --shadow-1: 0 1px 2px var(--shadow-color);
+  --shadow-2: 0 1px 2px var(--shadow-color), 0 4px 12px light-dark(oklch(0.25 0.02 255 / 0.06), oklch(0 0 0 / 0.28));
+  --shadow-3: 0 2px 6px var(--shadow-color), 0 12px 32px light-dark(oklch(0.25 0.02 255 / 0.10), oklch(0 0 0 / 0.40));
+  --shadow-window: 0 0 0 0.5px light-dark(oklch(0 0 0 / 0.18), oklch(0 0 0 / 0.8)), 0 24px 70px light-dark(oklch(0.2 0.02 255 / 0.28), oklch(0 0 0 / 0.55));
+  --shadow-inset-hl: inset 0 0.5px 0 light-dark(oklch(1 0 0 / 0.9), oklch(1 0 0 / 0.08));
+
+  /* ── Focus ── */
+  --focus-ring: 0 0 0 1px var(--accent), 0 0 0 4px light-dark(oklch(0.540 0.120 228 / 0.28), oklch(0.800 0.120 215 / 0.32));
+
+  /* ── Layers ── */
+  --z-base: 0; --z-sticky: 10; --z-sidebar: 20; --z-drawer: 30; --z-popover: 40; --z-dialog: 50;
+  --z-toast: 60; --z-palette: 70; --z-scenario: 80; --z-tooltip: 90;
+
+  /* ── Motion ── */
+  --motion-k: 1;
+  --dur-instant: 0ms;
+  --dur-press: calc(120ms * var(--motion-k));
+  --dur-fast: calc(160ms * var(--motion-k));
+  --dur-base: calc(220ms * var(--motion-k));
+  --dur-moderate: calc(320ms * var(--motion-k));
+  --dur-data: calc(900ms * var(--motion-k));
+  --dur-exit-base: calc(155ms * var(--motion-k));
+  --dur-exit-moderate: calc(225ms * var(--motion-k));
+  --dur-theme: calc(250ms * var(--motion-k));
+  --dur-flash: calc(600ms * var(--motion-k));
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-linear: linear;
+  /* spring approximations (exact linear() generated in js/motion.js) */
+  --spring-layout: cubic-bezier(0.25, 0.9, 0.3, 1);   /* bounce 0, 380ms */
+  --spring-snappy: cubic-bezier(0.3, 1.25, 0.45, 1);  /* bounce 0.15, after drag */
+  --dur-spring: calc(380ms * var(--motion-k));
+  --stagger: calc(40ms * var(--motion-k));
+  --motion-shift: 8px;
+  --motion-scale-in: 0.96;
+  --motion-press-scale: 0.97;
+}
+
+/* Reduced motion — fades only (150 ms), no shift/scale/blur. */
+[data-motion="reduced"] {
+  --dur-press: 0ms; --dur-fast: 150ms; --dur-base: 150ms; --dur-moderate: 150ms; --dur-data: 0ms;
+  --dur-exit-base: 150ms; --dur-exit-moderate: 150ms; --dur-spring: 150ms; --stagger: 0ms;
+  --motion-shift: 0px; --motion-scale-in: 1; --motion-press-scale: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-motion="system"] {
+    --dur-press: 0ms; --dur-fast: 150ms; --dur-base: 150ms; --dur-moderate: 150ms; --dur-data: 0ms;
+    --dur-exit-base: 150ms; --dur-exit-moderate: 150ms; --dur-spring: 150ms; --stagger: 0ms;
+    --motion-shift: 0px; --motion-scale-in: 1; --motion-press-scale: 1;
+  }
+}
+
+/* Reduced transparency — every material becomes solid. */
+[data-transparency="reduced"] {
+  --mat-window-bg: light-dark(oklch(0.945 0.004 255), oklch(0.205 0.008 255)); --mat-window-filter: none;
+  --mat-toolbar-bg: var(--surface-content); --mat-toolbar-filter: none;
+  --mat-popover-bg: var(--surface-raised); --mat-popover-filter: none;
+  --mat-sheet-bg: var(--surface-raised); --mat-sheet-filter: none;
+}
+@media (prefers-reduced-transparency: reduce) {
+  [data-transparency="system"] {
+    --mat-window-bg: light-dark(oklch(0.945 0.004 255), oklch(0.205 0.008 255)); --mat-window-filter: none;
+    --mat-toolbar-bg: var(--surface-content); --mat-toolbar-filter: none;
+    --mat-popover-bg: var(--surface-raised); --mat-popover-filter: none;
+    --mat-sheet-bg: var(--surface-raised); --mat-sheet-filter: none;
+  }
+}
+
+/* Increased contrast — defined borders, stronger secondary text. */
+@media (prefers-contrast: more) {
+  :root, [data-theme] {
+    --border-subtle: light-dark(oklch(0.2 0.01 255 / 0.28), oklch(1 0 0 / 0.28));
+    --border-default: light-dark(oklch(0.2 0.01 255 / 0.42), oklch(1 0 0 / 0.40));
+    --text-secondary: light-dark(oklch(0.300 0.012 255), oklch(0.880 0.008 255));
+    --text-tertiary: light-dark(oklch(0.380 0.012 255), oklch(0.800 0.010 255));
+  }
+}

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+<title id="title">NVitals Drive — Ícono de la aplicación</title>
+<desc id="desc">Reconstrucción vectorial del icono NV con pulso y unidad de almacenamiento. Trazados, degradados y efectos SVG, sin imágenes incrustadas. Exterior transparente.</desc>
+<defs>
+  <path id="frame-shape" d="M289 13 H749 C836 13 895 32 944 91 C986 142 1003 200 1003 283 V698 C1003 787 984 845 936 898 C889 948 832 966 746 966 H283 C198 966 141 946 94 894 C48 843 31 786 31 700 V286 C31 198 48 143 95 92 C144 38 202 13 289 13Z"/>
+  <path id="n-shape" d="M169 613 V281 C169 245 189 219 218 219 H281 C292 219 298 221 304 231 L532 599 Q534 602 528 602 H417 Q408 602 404 596 L275 396 Q271 391 270 399 V598 Q270 602 266 602 H211 Q188 602 169 613Z"/>
+  <path id="v-shape" d="M349 220 H430 Q444 220 450 231 L587 399 Q590 404 593 398 L674 235 Q681 220 699 220 H816 C846 220 866 243 866 277 V611 Q848 602 828 602 H587 Q579 602 575 595 L345 228 Q340 221 349 220Z"/>
+  <path id="body-shape" d="M211 622 H823 C854 622 877 644 877 675 V741 C877 771 854 795 823 795 H212 C181 795 157 772 157 742 V677 C157 646 179 622 211 622Z"/>
+  <path id="pulse-shape" d="M568 486 H661 L709 362 L742 563 L779 472 H866"/>
+  <clipPath id="clip-frame"><use xlink:href="#frame-shape"/></clipPath>
+  <clipPath id="clip-n"><use xlink:href="#n-shape"/></clipPath>
+  <clipPath id="clip-v"><use xlink:href="#v-shape"/></clipPath>
+  <clipPath id="pulse-end"><rect x="510" y="305" width="356" height="300"/></clipPath>
+  <linearGradient id="panel" x1="0.15" y1="0" x2="0.75" y2="1"><stop stop-color="#102c4b"/><stop offset="0.28" stop-color="#051529"/><stop offset="0.63" stop-color="#010c1c"/><stop offset="1" stop-color="#022448"/></linearGradient>
+  <radialGradient id="top-wash" cx="0.45" cy="0" r="0.8"><stop stop-color="#1679bf" stop-opacity=".3"/><stop offset=".68" stop-color="#001631" stop-opacity="0"/></radialGradient>
+  <radialGradient id="lower-wash" cx="0.55" cy="1" r="0.67"><stop stop-color="#005de4" stop-opacity=".22"/><stop offset="1" stop-color="#00132b" stop-opacity="0"/></radialGradient>
+  <linearGradient id="rim" x1="0" y1="0" x2=".28" y2="1"><stop stop-color="#b6fcff"/><stop offset=".12" stop-color="#0085ff"/><stop offset=".48" stop-color="#19e2ff"/><stop offset=".77" stop-color="#00a5ff"/><stop offset="1" stop-color="#25f7ff"/></linearGradient>
+  <linearGradient id="silver" x1=".12" y1="0" x2=".62" y2="1"><stop stop-color="#ffffff"/><stop offset=".18" stop-color="#effbff"/><stop offset=".46" stop-color="#ceeefa"/><stop offset=".75" stop-color="#a9d7f0"/><stop offset="1" stop-color="#e0f7ff"/></linearGradient>
+  <linearGradient id="silver-bevel" x1="0" y1="0" x2="1" y2=".2"><stop stop-color="#ffffff"/><stop offset=".04" stop-color="#ffffff" stop-opacity="0"/><stop offset=".85" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#ffffff" stop-opacity=".9"/></linearGradient>
+  <radialGradient id="silver-shade" cx=".11" cy=".75" r=".7"><stop stop-color="#3e9ed8" stop-opacity=".31"/><stop offset="1" stop-color="#a6d6f4" stop-opacity="0"/></radialGradient>
+  <linearGradient id="v-blue" x1="0" y1="0" x2=".42" y2="1"><stop stop-color="#42faff"/><stop offset=".12" stop-color="#00cdff"/><stop offset=".43" stop-color="#0085ff"/><stop offset=".71" stop-color="#0052ee"/><stop offset="1" stop-color="#003fc6"/></linearGradient>
+  <radialGradient id="v-depth" cx=".78" cy=".81" r=".72"><stop stop-color="#0033a9" stop-opacity=".5"/><stop offset="1" stop-color="#0067f5" stop-opacity="0"/></radialGradient>
+  <linearGradient id="v-edge" x1="0" y1="0" x2=".18" y2="1"><stop stop-color="#e4ffff"/><stop offset=".09" stop-color="#42f9ff"/><stop offset=".5" stop-color="#02cfff"/><stop offset="1" stop-color="#00f7ff"/></linearGradient>
+  <linearGradient id="drive-rim" x1="0" y1="0" x2=".17" y2="1"><stop stop-color="#f5ffff"/><stop offset=".075" stop-color="#a8eaff"/><stop offset=".17" stop-color="#22bcff"/><stop offset=".43" stop-color="#007abb"/><stop offset=".68" stop-color="#08718e"/><stop offset=".9" stop-color="#007fd7"/><stop offset="1" stop-color="#0afaff"/></linearGradient>
+  <linearGradient id="drive-face" x1=".15" y1="0" x2=".3" y2="1"><stop stop-color="#0e2948"/><stop offset=".4" stop-color="#041831"/><stop offset=".75" stop-color="#020e20"/><stop offset="1" stop-color="#052240"/></linearGradient>
+  <linearGradient id="status-light" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset=".55" stop-color="#e9ffff"/><stop offset="1" stop-color="#adfaff"/></linearGradient>
+  <radialGradient id="blue-light" cx=".55" cy=".72" r=".85"><stop stop-color="#009ced"/><stop offset=".55" stop-color="#00c9ff"/><stop offset=".77" stop-color="#04f1ff"/><stop offset="1" stop-color="#00acff"/></radialGradient>
+  <linearGradient id="silver-light" x1=".32" y1="0" x2=".72" y2="1"><stop stop-color="#ffffff"/><stop offset=".26" stop-color="#d9e8ee"/><stop offset=".54" stop-color="#a6bdcb"/><stop offset=".83" stop-color="#6a8ea7"/><stop offset="1" stop-color="#b8deef"/></linearGradient>
+  <filter id="outer-glow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="12"/></filter>
+  <filter id="soft-glow" x="-50%" y="-100%" width="200%" height="300%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="pulse-glow" x="-40%" y="-45%" width="180%" height="190%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="9" result="wide"/><feGaussianBlur in="SourceGraphic" stdDeviation="3" result="tight"/><feMerge><feMergeNode in="wide"/><feMergeNode in="tight"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<g id="app-icon" transform="translate(-1.5 25.5)">
+  <g id="rounded-panel">
+    <use xlink:href="#frame-shape" fill="none" stroke="#006eff" stroke-width="5" opacity=".32" filter="url(#outer-glow)"/>
+    <use xlink:href="#frame-shape" fill="url(#panel)"/>
+    <use xlink:href="#frame-shape" fill="url(#top-wash)"/>
+    <use xlink:href="#frame-shape" fill="url(#lower-wash)"/>
+    <g clip-path="url(#clip-frame)">
+      <use xlink:href="#frame-shape" fill="none" stroke="#007eff" stroke-width="19" opacity=".7" filter="url(#soft-glow)"/>
+      <path d="M276 15 H760 M264 965 H780" stroke="#00eaff" stroke-width="15" opacity=".95" filter="url(#outer-glow)"/>
+    </g>
+    <use xlink:href="#frame-shape" fill="none" stroke="url(#rim)" stroke-width="2.15"/>
+    <path d="M290 14 H745" fill="none" stroke="#a9ffff" stroke-width="2.5" opacity=".95"/>
+  </g>
+  <g id="n-monogram">
+    <use xlink:href="#n-shape" fill="url(#silver)"/>
+    <use xlink:href="#n-shape" fill="url(#silver-shade)"/>
+    <use xlink:href="#n-shape" fill="url(#silver-bevel)"/>
+    <use xlink:href="#n-shape" fill="none" stroke="#ffffff" stroke-width="1.8" opacity=".82"/>
+    <path d="M174 589 V284" fill="none" stroke="#ffffff" stroke-width="5" opacity=".65" filter="url(#soft-glow)" clip-path="url(#clip-n)"/>
+  </g>
+  <g id="v-monogram">
+    <use xlink:href="#v-shape" fill="none" stroke="#006fff" stroke-width="8" opacity=".56" filter="url(#soft-glow)"/>
+    <use xlink:href="#v-shape" fill="url(#v-blue)"/>
+    <use xlink:href="#v-shape" fill="url(#v-depth)"/>
+    <g clip-path="url(#clip-v)"><use xlink:href="#v-shape" fill="none" stroke="#19f5ff" stroke-width="12" filter="url(#soft-glow)"/></g>
+    <use xlink:href="#v-shape" fill="none" stroke="url(#v-edge)" stroke-width="1.8"/>
+    <path d="M350 221 H430 M704 221 H813" fill="none" stroke="#e8ffff" stroke-width="2.3" opacity=".85"/>
+  </g>
+  <g id="vital-pulse" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <use xlink:href="#pulse-shape" stroke="#00dfff" stroke-width="20" filter="url(#pulse-glow)"/>
+    <use xlink:href="#pulse-shape" stroke="#f7ffff" stroke-width="18.5" clip-path="url(#pulse-end)"/>
+  </g>
+  <g id="storage-drive">
+    <use xlink:href="#body-shape" fill="none" stroke="#0077ff" stroke-width="8" opacity=".6" filter="url(#soft-glow)"/>
+    <use xlink:href="#body-shape" fill="url(#drive-rim)"/>
+    <path d="M212 635 H822 C846 635 864 653 864 677 V739 C864 763 846 782 822 782 H213 C188 782 170 764 170 740 V677 C170 653 188 635 212 635Z" fill="url(#drive-face)" stroke="#061b34" stroke-width="1.2"/>
+    <use xlink:href="#body-shape" fill="none" stroke="#caffff" stroke-width="1.65" opacity=".85"/>
+    <path d="M212 623 H822" stroke="#ffffff" stroke-width="1.8" opacity=".9"/>
+    <rect x="218" y="704" width="246" height="22" rx="11" fill="#008bff" stroke="#005fff" stroke-width="7" filter="url(#pulse-glow)"/>
+    <rect x="218" y="704" width="246" height="22" rx="11" fill="url(#status-light)" stroke="#dfffff" stroke-width="1.2"/>
+    <circle cx="701.5" cy="714" r="26" fill="#0048ff" stroke="#0048ff" stroke-width="5" filter="url(#soft-glow)"/>
+    <circle cx="701.5" cy="714" r="25.4" fill="url(#blue-light)" stroke="#00edff" stroke-width="1.4"/>
+    <circle cx="788.4" cy="714" r="25.6" fill="url(#silver-light)" stroke="#ddeef5" stroke-width="1.35"/>
+  </g>
+</g>
+</svg>

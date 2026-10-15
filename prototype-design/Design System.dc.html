@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta charset="utf-8">
+<title>HealthDiskInfo — Sistema de diseño</title>
+<link rel="stylesheet" href="css/tokens.css">
+<script src="js/icons.js"></script>
+<script src="js/motion.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--font-sans);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:default;white-space:nowrap}
+:focus{outline:none}
+:focus-visible{outline:none;box-shadow:var(--focus-ring)!important}
+a{color:var(--accent-fg);text-decoration:none}
+a:hover{color:var(--accent-hover);text-decoration:underline}
+@keyframes hdi-shimmer{0%,100%{opacity:.45}50%{opacity:1}}
+@keyframes hdi-spin{to{transform:rotate(360deg)}}
+@keyframes hdi-beat{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+@keyframes hdi-listen{0%{opacity:0;transform:scale(.6)}30%{opacity:.35}100%{opacity:0;transform:scale(1.5)}}
+@keyframes hdi-indet{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+</style>
+</helmet>
+
+<div data-hdi-root="" data-theme="{{ theme }}" data-motion="{{ motion }}" style="min-height:100vh;background:var(--surface-content);color:var(--text-primary);font-size:var(--type-body-size);line-height:var(--type-body-lh);--motion-k:{{ k }}">
+  <header style="position:sticky;top:0;z-index:var(--z-sticky);display:flex;align-items:center;gap:14px;height:56px;padding:0 28px;background:var(--mat-toolbar-bg);-webkit-backdrop-filter:var(--mat-toolbar-filter);backdrop-filter:var(--mat-toolbar-filter);box-shadow:0 0.5px 0 var(--border-subtle)">
+    <img src="assets/app-icon.svg" width="30" height="30" alt="">
+    <strong style="font-size:var(--type-title3-size);font-weight:600;letter-spacing:var(--type-title3-track)">HealthDiskInfo · Sistema de diseño</strong>
+    <span style="flex:1"></span>
+    <nav style="display:flex;gap:2px;font-size:var(--type-callout-size)">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="6"><a href="{{ n.href }}" style="padding:4px 8px;border-radius:var(--r-sm);color:var(--text-secondary)">{{ n.label }}</a></sc-for>
+    </nav>
+    <div role="group" aria-label="Tema" style="display:flex;gap:2px;padding:2px;border-radius:var(--r-md);background:var(--surface-sunken);border:0.5px solid var(--border-subtle)"><sc-for list="{{ themes }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="height:22px;padding:0 10px;border:0;border-radius:6px;background:{{ o.bg }};box-shadow:{{ o.shadow }};color:{{ o.fg }};font-size:var(--type-callout-size);font-weight:500">{{ o.label }}</button></sc-for></div>
+    <div role="group" aria-label="Velocidad" style="display:flex;gap:2px;padding:2px;border-radius:var(--r-md);background:var(--surface-sunken);border:0.5px solid var(--border-subtle)"><sc-for list="{{ speeds }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="height:22px;padding:0 8px;border:0;border-radius:6px;background:{{ o.bg }};box-shadow:{{ o.shadow }};color:{{ o.fg }};font-size:var(--type-callout-size);font-weight:500">{{ o.label }}</button></sc-for></div>
+    <label style="display:flex;align-items:center;gap:6px;font-size:var(--type-callout-size);color:var(--text-secondary)">Reducir movimiento<button role="switch" aria-checked="{{ rmOn }}" onClick="{{ toggleRm }}" style="position:relative;width:28px;height:16px;padding:0;border:0;border-radius:8px;background:{{ rmTrack }}"><span style="position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transform:{{ rmKnob }};transition:transform var(--dur-base) var(--ease-out)"></span></button></label>
+  </header>
+
+  <main style="max-width:1240px;margin:0 auto;padding:32px 28px 80px;display:flex;flex-direction:column;gap:56px">
+
+    <!-- ═══ Marca ═══ -->
+    <section id="marca" data-screen-label="Marca" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Marca</h2>
+      <div style="display:grid;grid-template-columns:260px 1fr 1fr;gap:16px">
+        <div style="display:grid;place-items:center;padding:24px;border-radius:var(--r-xl);background:var(--surface-sunken)"><img src="assets/app-icon.svg" width="180" height="180" alt="Ícono de la app"></div>
+        <div style="display:flex;flex-direction:column;justify-content:center;gap:14px;padding:24px;border-radius:var(--r-xl);background:var(--surface-sunken)">
+          <div style="display:flex;align-items:center;gap:12px"><svg width="44" height="44" style="color:var(--accent-fg)"><use href="#i-ssd"></use></svg><svg width="44" height="44" style="color:var(--accent-fg);margin-left:-18px"><use href="#i-pulse"></use></svg></div>
+          <span style="font-family:var(--font-display);font-size:34px;line-height:40px;font-weight:700;letter-spacing:-0.022em">Health<span style="color:var(--accent-fg)">Disk</span>Info</span>
+          <span style="font-size:var(--type-callout-size);color:var(--text-secondary)">Símbolo: módulo M.2 atravesado por una línea de pulso. Wordmark en SF Pro Display 700, tracking −0.022em; «Disk» en el acento.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:24px;border-radius:var(--r-xl);background:var(--surface-sunken);font-size:var(--type-callout-size);color:var(--text-secondary)">
+          <strong style="color:var(--text-primary);font-weight:600">Ícono de macOS · 1024 × 1024</strong>
+          <span>Cuerpo de 824 × 824 centrado, esquinas continuas de ~185 px, grafito con luz superior y pulso cian con brillo suave.</span>
+          <span style="font-family:var(--font-mono);font-size:var(--type-note-size)">assets/app-icon.svg</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Color ═══ -->
+    <section id="color" data-screen-label="Color" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Color</h2>
+      <p style="margin:0;max-width:720px;color:var(--text-secondary);text-wrap:pretty">Neutrales grafito fríos (h 255), acento cian «señal» y cinco estados de salud. Cada estado tiene fondo, texto, borde y sólido, y siempre va con ícono y texto. Se muestran ambos temas lado a lado.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <sc-for list="{{ themePair }}" as="tp" hint-placeholder-count="2">
+          <div data-theme="{{ tp.key }}" style="display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:var(--r-xl);background:var(--surface-content);color:var(--text-primary);box-shadow:inset 0 0 0 0.5px var(--border-default)">
+            <strong style="font-weight:600">{{ tp.label }}</strong>
+            <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:3px"><sc-for list="{{ grays }}" as="g" hint-placeholder-count="12"><div style="display:flex;flex-direction:column;gap:3px"><div style="height:40px;border-radius:6px;background:{{ g.v }};box-shadow:inset 0 0 0 0.5px var(--border-subtle)"></div><span style="font-size:var(--type-caption-size);color:var(--text-tertiary);text-align:center">{{ g.n }}</span></div></sc-for></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ accents }}" as="a" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;gap:3px;width:84px"><div style="height:34px;border-radius:6px;background:{{ a.v }};box-shadow:inset 0 0 0 0.5px var(--border-subtle)"></div><span style="font-family:var(--font-mono);font-size:var(--type-caption-size);color:var(--text-tertiary)">{{ a.n }}</span></div></sc-for></div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ health }}" as="h" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:110px repeat(3,1fr) 36px;gap:6px;align-items:center">
+                  <span style="display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px 0 6px;border-radius:var(--r-pill);background:{{ h.bg }};color:{{ h.fg }};box-shadow:inset 0 0 0 0.5px {{ h.border }};font-size:var(--type-note-size);font-weight:600;justify-self:start"><svg width="12" height="12"><use href="{{ h.icon }}"></use></svg>{{ h.label }}</span>
+                  <span style="height:26px;border-radius:6px;background:{{ h.bg }};display:grid;place-items:center;font-size:var(--type-caption-size);color:{{ h.fg }}">bg</span>
+                  <span style="height:26px;border-radius:6px;box-shadow:inset 0 0 0 1.5px {{ h.border }};display:grid;place-items:center;font-size:var(--type-caption-size);color:var(--text-tertiary)">border</span>
+                  <span style="height:26px;border-radius:6px;display:grid;place-items:center;font-size:var(--type-callout-size);font-weight:600;color:{{ h.fg }}">Texto fg</span>
+                  <span style="height:26px;border-radius:50%;width:26px;background:{{ h.solid }}"></span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ dataC }}" as="a" hint-placeholder-count="8"><div style="display:flex;flex-direction:column;gap:3px;width:72px"><div style="height:28px;border-radius:6px;background:{{ a.v }};box-shadow:inset 0 0 0 0.5px var(--border-subtle)"></div><span style="font-family:var(--font-mono);font-size:var(--type-caption-size);color:var(--text-tertiary)">{{ a.n }}</span></div></sc-for></div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- ═══ Tipografía ═══ -->
+    <section id="tipografia" data-screen-label="Tipografía" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Tipografía</h2>
+      <p style="margin:0;color:var(--text-secondary)">Fuente del sistema (SF Pro) y SF Mono. Todos los números en <code style="font-family:var(--font-mono)">tabular-nums</code>. Tracking negativo en tamaños grandes, cercano a 0 en el cuerpo.</p>
+      <div style="border-radius:var(--r-lg);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-subtle)">
+        <sc-for list="{{ type }}" as="t" hint-placeholder-count="10">
+          <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 260px;gap:16px;align-items:center;min-height:52px;padding:8px 18px;border-bottom:0.5px solid var(--border-subtle)">
+            <span style="font-family:var(--font-mono);font-size:var(--type-note-size);color:var(--accent-fg)">{{ t.token }}</span>
+            <span style="font-family:{{ t.font }};font-size:{{ t.size }};line-height:{{ t.lh }};font-weight:{{ t.weight }};letter-spacing:{{ t.track }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.sample }}</span>
+            <span style="font-family:var(--font-mono);font-size:var(--type-note-size);color:var(--text-tertiary)">{{ t.spec }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- ═══ Espaciado, radios, elevación ═══ -->
+    <section id="espacio" data-screen-label="Espaciado" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Espaciado, radios y elevación</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:6px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600;margin-bottom:4px">Rejilla de 4 px</strong><sc-for list="{{ space }}" as="s" hint-placeholder-count="10"><div style="display:flex;align-items:center;gap:10px"><span style="width:56px;font-family:var(--font-mono);font-size:var(--type-note-size);color:var(--text-tertiary)">{{ s.n }}</span><span style="height:10px;width:{{ s.v }};border-radius:2px;background:var(--accent)"></span><span style="font-size:var(--type-note-size);color:var(--text-secondary)">{{ s.v }}</span></div></sc-for></div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">Radios</strong><div style="display:flex;flex-wrap:wrap;gap:10px"><sc-for list="{{ radii }}" as="r" hint-placeholder-count="7"><div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:56px;height:56px;border-radius:{{ r.v }};background:var(--surface-raised);box-shadow:inset 0 0 0 1px var(--border-strong)"></div><span style="font-family:var(--font-mono);font-size:var(--type-caption-size);color:var(--text-tertiary)">{{ r.n }}</span></div></sc-for></div></div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">Elevación</strong><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><sc-for list="{{ shadows }}" as="s" hint-placeholder-count="4"><div style="height:64px;border-radius:var(--r-lg);background:var(--surface-raised);box-shadow:{{ s.v }};display:grid;place-items:center;font-family:var(--font-mono);font-size:var(--type-note-size);color:var(--text-secondary)">{{ s.n }}</div></sc-for></div><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">Sombras suaves y cortas. Bajo barras fijas se usa un desvanecido en lugar de divisores.</span></div>
+      </div>
+    </section>
+
+    <!-- ═══ Materiales ═══ -->
+    <section id="materiales" data-screen-label="Materiales" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Materiales</h2>
+      <p style="margin:0;max-width:720px;color:var(--text-secondary);text-wrap:pretty">Solo capas flotantes usan material translúcido, nunca una sobre otra. Cada uno tiene su alternativa sólida para <code style="font-family:var(--font-mono)">prefers-reduced-transparency</code>.</p>
+      <div style="position:relative;padding:28px;border-radius:var(--r-2xl);overflow:hidden;background:radial-gradient(50% 70% at 20% 30%, oklch(0.6 0.12 230) 0%, transparent 60%), radial-gradient(40% 60% at 80% 70%, oklch(0.62 0.12 180) 0%, transparent 60%), radial-gradient(30% 40% at 60% 10%, oklch(0.55 0.1 300) 0%, transparent 60%), var(--gray-4)">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+          <sc-for list="{{ mats }}" as="m" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="height:110px;border-radius:var(--r-lg);background:{{ m.bg }};-webkit-backdrop-filter:{{ m.filter }};backdrop-filter:{{ m.filter }};box-shadow:var(--shadow-2), inset 0 0 0 0.5px var(--border-default);padding:12px;display:flex;flex-direction:column;justify-content:space-between"><strong style="font-weight:600">{{ m.label }}</strong><span style="font-family:var(--font-mono);font-size:var(--type-caption-size);color:var(--text-secondary)">{{ m.token }}</span></div>
+              <div style="height:44px;border-radius:var(--r-lg);background:{{ m.solid }};box-shadow:inset 0 0 0 0.5px var(--border-default);padding:0 12px;display:flex;align-items:center;font-size:var(--type-note-size);color:var(--text-secondary)">Sólido (reduced-transparency)</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Bordes, foco, iconos, capas ═══ -->
+    <section id="iconos" data-screen-label="Iconografía" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Bordes, foco, iconografía y capas</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">Bordes</strong>
+          <div style="height:36px;border-radius:var(--r-md);box-shadow:inset 0 0 0 0.5px var(--border-subtle);display:flex;align-items:center;padding:0 10px;font-family:var(--font-mono);font-size:var(--type-note-size)">--border-subtle · 0.5 px</div>
+          <div style="height:36px;border-radius:var(--r-md);box-shadow:inset 0 0 0 0.5px var(--border-default);display:flex;align-items:center;padding:0 10px;font-family:var(--font-mono);font-size:var(--type-note-size)">--border-default · 0.5 px</div>
+          <div style="height:36px;border-radius:var(--r-md);box-shadow:inset 0 0 0 1px var(--border-strong);display:flex;align-items:center;padding:0 10px;font-family:var(--font-mono);font-size:var(--type-note-size)">--border-strong · 1 px</div>
+          <div style="height:36px;border-radius:var(--r-md);box-shadow:var(--focus-ring);display:flex;align-items:center;padding:0 10px;font-family:var(--font-mono);font-size:var(--type-note-size)">--focus-ring · 1 + 3 px</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">Íconos · trazo 1.5 px, 24 × 24</strong>
+          <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px"><sc-for list="{{ icons }}" as="i" hint-placeholder-count="40"><span data-tip="{{ i }}" title="{{ i }}" style="height:34px;display:grid;place-items:center;border-radius:var(--r-sm);background:var(--surface-raised);color:var(--text-primary)"><svg width="18" height="18"><use href="{{ i }}"></use></svg></span></sc-for></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600;margin-bottom:6px">Capas (z-index)</strong><sc-for list="{{ layers }}" as="l" hint-placeholder-count="10"><div style="display:flex;justify-content:space-between;font-size:var(--type-callout-size);padding:3px 0;border-bottom:0.5px solid var(--border-subtle)"><span style="font-family:var(--font-mono);font-size:var(--type-note-size)">{{ l.n }}</span><span style="color:var(--text-secondary)">{{ l.v }}</span></div></sc-for></div>
+      </div>
+    </section>
+
+    <!-- ═══ Movimiento ═══ -->
+    <section id="movimiento" data-screen-label="Movimiento" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Movimiento</h2>
+      <p style="margin:0;max-width:760px;color:var(--text-secondary);text-wrap:pretty">Solo <code style="font-family:var(--font-mono)">transform</code> y <code style="font-family:var(--font-mono)">opacity</code> (blur ≤ 8 px puntual). Nunca <code style="font-family:var(--font-mono)">ease-in</code>; salidas ~30 % más rápidas; entradas desde <code style="font-family:var(--font-mono)">scale(0.96)</code>. Con reducir movimiento todo se vuelve un fundido de 150 ms. Pulsa cada fila para reproducirla.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:var(--r-xl);background:var(--surface-sunken)">
+          <strong style="font-weight:600;padding:4px 6px 8px">Duraciones (con --ease-out)</strong>
+          <sc-for list="{{ durs }}" as="m" hint-placeholder-count="6">
+            <button onClick="{{ m.play }}" style="display:grid;grid-template-columns:150px 60px 1fr;gap:10px;align-items:center;height:36px;padding:0 6px;border:0;border-radius:var(--r-md);background:transparent;text-align:left" style-hover="background:var(--surface-hover)">
+              <span style="font-family:var(--font-mono);font-size:var(--type-note-size)">{{ m.n }}</span><span style="font-size:var(--type-note-size);color:var(--text-secondary)">{{ m.v }}</span>
+              <span style="position:relative;height:18px;border-radius:9px;background:var(--surface-raised)"><span data-demo="{{ m.id }}" style="position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--accent)"></span></span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px;padding:14px;border-radius:var(--r-xl);background:var(--surface-sunken)">
+          <strong style="font-weight:600;padding:4px 6px 8px">Curvas y springs (400 ms)</strong>
+          <sc-for list="{{ curves }}" as="m" hint-placeholder-count="5">
+            <button onClick="{{ m.play }}" style="display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;min-height:40px;padding:0 6px;border:0;border-radius:var(--r-md);background:transparent;text-align:left" style-hover="background:var(--surface-hover)">
+              <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-mono);font-size:var(--type-note-size)">{{ m.n }}</span><span style="font-size:var(--type-caption-size);color:var(--text-tertiary)">{{ m.v }}</span></span>
+              <span style="position:relative;height:18px;border-radius:9px;background:var(--surface-raised)"><span data-demo="{{ m.id }}" style="position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--accent)"></span></span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)">
+          <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-weight:600">Escalonado · 40 ms, máx. 6</strong><button onClick="{{ playStagger }}" style="height:26px;padding:0 10px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:inset 0 0 0 0.5px var(--border-default);font-weight:500">Reproducir</button></div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px"><sc-for list="{{ six }}" as="x" hint-placeholder-count="6"><div data-stagger="" style="height:56px;border-radius:var(--r-lg);background:var(--surface-raised);box-shadow:var(--shadow-1)"></div></sc-for></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)">
+          <div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-weight:600">Entradas de capas</strong><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">pop · dialog · sheet · toast · materialize · paper</span></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ presets }}" as="p" hint-placeholder-count="6"><button onClick="{{ p.play }}" style="height:26px;padding:0 10px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:inset 0 0 0 0.5px var(--border-default);font-family:var(--font-mono);font-size:var(--type-note-size)">{{ p.n }}</button></sc-for></div>
+          <div style="height:90px;display:grid;place-items:center"><div data-preset-target="" style="width:220px;height:70px;border-radius:var(--r-lg);background:var(--mat-popover-bg);-webkit-backdrop-filter:var(--mat-popover-filter);backdrop-filter:var(--mat-popover-filter);box-shadow:var(--shadow-3), inset 0 0 0 0.5px var(--border-default);display:grid;place-items:center;font-size:var(--type-callout-size);color:var(--text-secondary)">Capa flotante</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="componentes" data-screen-label="Componentes: controles" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Componentes · botones y selección</h2>
+      <!-- @component Button | variants: primary, secondary, ghost, destructive, icon | sizes: sm 22, md 28, lg 34 | states: default, hover, active, focus, disabled, loading -->
+      <div style="display:grid;grid-template-columns:110px repeat(6,1fr);gap:10px 12px;align-items:center;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)">
+        <span></span><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">default</span><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">hover</span><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">active · 0.97</span><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">focus</span><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">disabled</span><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">loading</span>
+        <span style="font-family:var(--font-mono);font-size:var(--type-note-size)">primary</span>
+        <button style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--accent);color:var(--text-on-accent);font-weight:600" style-hover="background:var(--accent-hover)" style-active="transform:scale(0.97)">Iniciar</button>
+        <button style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--accent-hover);color:var(--text-on-accent);font-weight:600">Iniciar</button>
+        <button style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--accent-pressed);color:var(--text-on-accent);font-weight:600;transform:scale(0.97)">Iniciar</button>
+        <button style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--accent);color:var(--text-on-accent);font-weight:600;box-shadow:var(--focus-ring)">Iniciar</button>
+        <button disabled="{{ true }}" style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--accent);color:var(--text-on-accent);font-weight:600;opacity:.4">Iniciar</button>
+        <button style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--accent-soft);color:var(--accent-fg);font-weight:600"><svg width="12" height="12" viewBox="0 0 16 16" style="animation:hdi-spin .9s linear infinite"><circle cx="8" cy="8" r="6.5" fill="none" style="stroke:var(--ring-track);stroke-width:2.5"></circle><path d="M8 1.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" style="stroke:var(--accent);stroke-width:2.5;stroke-linecap:round"></path></svg>Generando…</button>
+        <span style="font-family:var(--font-mono);font-size:var(--type-note-size)">secondary</span>
+        <button style="height:28px;padding:0 12px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-default);font-weight:500" style-hover="background:var(--surface-raised-2)" style-active="transform:scale(0.97)">Actualizar</button>
+        <button style="height:28px;padding:0 12px;border:0;border-radius:var(--r-md);background:var(--surface-raised-2);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-default);font-weight:500">Actualizar</button>
+        <button style="height:28px;padding:0 12px;border:0;border-radius:var(--r-md);background:var(--surface-pressed);box-shadow:inset 0 0 0 0.5px var(--border-default);font-weight:500;transform:scale(0.97)">Actualizar</button>
+        <button style="height:28px;padding:0 12px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:var(--focus-ring);font-weight:500">Actualizar</button>
+        <button disabled="{{ true }}" style="height:28px;padding:0 12px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:inset 0 0 0 0.5px var(--border-subtle);font-weight:500;color:var(--text-disabled)">Actualizar</button>
+        <span></span>
+        <span style="font-family:var(--font-mono);font-size:var(--type-note-size)">ghost</span>
+        <button style="height:28px;padding:0 10px;border:0;border-radius:var(--r-md);background:transparent;color:var(--accent-fg);font-weight:500" style-hover="background:var(--surface-hover)">Más información</button>
+        <button style="height:28px;padding:0 10px;border:0;border-radius:var(--r-md);background:var(--surface-hover);color:var(--accent-fg);font-weight:500">Más información</button>
+        <button style="height:28px;padding:0 10px;border:0;border-radius:var(--r-md);background:var(--surface-pressed);color:var(--accent-fg);font-weight:500;transform:scale(0.97)">Más información</button>
+        <button style="height:28px;padding:0 10px;border:0;border-radius:var(--r-md);background:transparent;color:var(--accent-fg);font-weight:500;box-shadow:var(--focus-ring)">Más información</button>
+        <button disabled="{{ true }}" style="height:28px;padding:0 10px;border:0;border-radius:var(--r-md);background:transparent;color:var(--text-disabled);font-weight:500">Más información</button>
+        <span></span>
+        <span style="font-family:var(--font-mono);font-size:var(--type-note-size)">destructive</span>
+        <button style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--health-critical-solid);color:#fff;font-weight:600" style-active="transform:scale(0.97)">Cancelar escaneo</button>
+        <button style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--health-critical-fg);color:#fff;font-weight:600">Cancelar escaneo</button>
+        <button style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--health-critical-solid);color:#fff;font-weight:600;transform:scale(0.97)">Cancelar escaneo</button>
+        <button style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--health-critical-solid);color:#fff;font-weight:600;box-shadow:var(--focus-ring)">Cancelar escaneo</button>
+        <button disabled="{{ true }}" style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--health-critical-solid);color:#fff;font-weight:600;opacity:.4">Cancelar escaneo</button>
+        <span></span>
+        <span style="font-family:var(--font-mono);font-size:var(--type-note-size)">icon · sm/md/lg</span>
+        <div style="display:flex;align-items:center;gap:6px"><button aria-label="Copiar" style="width:22px;height:22px;display:grid;place-items:center;border:0;border-radius:var(--r-sm);background:transparent;color:var(--text-secondary)" style-hover="background:var(--surface-hover)"><svg width="12" height="12"><use href="#i-copy"></use></svg></button><button aria-label="Actualizar" style="width:28px;height:28px;display:grid;place-items:center;border:0;border-radius:var(--r-md);background:transparent;color:var(--text-secondary)" style-hover="background:var(--surface-hover)"><svg width="16" height="16"><use href="#i-refresh"></use></svg></button><button aria-label="Más" style="width:34px;height:34px;display:grid;place-items:center;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-default)"><svg width="18" height="18"><use href="#i-more"></use></svg></button></div>
+        <span style="font-family:var(--font-mono);font-size:var(--type-note-size);color:var(--text-tertiary)">sizes</span>
+        <div style="grid-column:span 4;display:flex;align-items:center;gap:8px"><button style="height:22px;padding:0 10px;border:0;border-radius:var(--r-sm);background:var(--accent);color:var(--text-on-accent);font-size:var(--type-callout-size);font-weight:600">sm 22</button><button style="height:28px;padding:0 14px;border:0;border-radius:var(--r-md);background:var(--accent);color:var(--text-on-accent);font-weight:600">md 28</button><button style="height:34px;padding:0 18px;border:0;border-radius:var(--r-md);background:var(--accent);color:var(--text-on-accent);font-size:var(--type-title3-size);font-weight:600">lg 34</button></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">SegmentedControl</strong>
+          <div role="group" style="align-self:flex-start;display:flex;gap:2px;padding:2px;border-radius:var(--r-md);background:var(--surface-content);border:0.5px solid var(--border-subtle)"><sc-for list="{{ segs }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="height:22px;padding:0 10px;border:0;border-radius:6px;background:{{ o.bg }};box-shadow:{{ o.shadow }};color:{{ o.fg }};font-size:var(--type-callout-size);font-weight:500;transition:background-color var(--dur-fast) var(--ease-out)">{{ o.label }}</button></sc-for></div>
+          <strong style="font-weight:600;margin-top:6px">Tabs · indicador con spring</strong>
+          <div data-ds-tabs="" role="tablist" style="position:relative;display:flex;gap:2px;border-bottom:0.5px solid var(--border-subtle)"><sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4"><button role="tab" data-active="{{ t.active }}" aria-selected="{{ t.active }}" onClick="{{ t.pick }}" style="height:32px;padding:0 10px;border:0;background:transparent;color:{{ t.fg }};font-weight:500">{{ t.label }}</button></sc-for><span style="position:absolute;left:0;bottom:-0.5px;width:100px;height:2px;border-radius:1px;background:var(--accent);transform-origin:left;transform:translateX({{ tabX }}px) scaleX({{ tabScale }});transition:{{ tabEase }}"></span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">Switch · Checkbox · Radio</strong>
+          <div style="display:flex;align-items:center;gap:16px">
+            <button role="switch" aria-checked="{{ swOn }}" onClick="{{ toggleSw }}" style="position:relative;width:28px;height:16px;padding:0;border:0;border-radius:8px;background:{{ swTrack }};transition:background-color var(--dur-fast) var(--ease-out)"><span style="position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 1px 2px oklch(0 0 0 / 0.3);transform:{{ swKnob }};transition:transform var(--dur-base) var(--ease-out)"></span></button>
+            <span style="position:relative;width:28px;height:16px;border-radius:8px;background:var(--gray-6);opacity:.45"><span style="position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff"></span></span>
+            <span style="font-size:var(--type-note-size);color:var(--text-tertiary)">on/off · disabled</span>
+          </div>
+          <button role="checkbox" aria-checked="{{ cbOn }}" onClick="{{ toggleCb }}" style="align-self:flex-start;display:flex;align-items:center;gap:8px;padding:0;border:0;background:transparent"><span style="width:14px;height:14px;display:grid;place-items:center;border-radius:4px;background:{{ cbBox }};box-shadow:inset 0 0 0 1px {{ cbBorder }};color:var(--text-on-accent)"><svg width="10" height="10" style="opacity:{{ cbCheck }}"><use href="#i-check"></use></svg></span>Incluir Salud SMART</button>
+          <div role="radiogroup" style="display:flex;gap:16px"><sc-for list="{{ radios }}" as="r" hint-placeholder-count="2"><button role="radio" aria-checked="{{ r.on }}" onClick="{{ r.pick }}" style="display:flex;align-items:center;gap:8px;padding:0;border:0;background:transparent"><span style="width:14px;height:14px;display:grid;place-items:center;border-radius:50%;box-shadow:inset 0 0 0 1.5px {{ r.ring }}"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:{{ r.dot }};transition:opacity var(--dur-fast) var(--ease-out)"></span></span>{{ r.label }}</button></sc-for></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">Entradas</strong>
+          <select style="height:28px;padding:0 8px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-default)"><option>Samsung SSD 990 PRO 2TB · disk4</option><option>WD_BLACK SN850X 1TB · disk6</option></select>
+          <input value="Andrea Castillo" style="height:28px;padding:0 10px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:inset 0 0 0 0.5px var(--border-default);outline:none" style-focus="box-shadow:var(--focus-ring)">
+          <input value="Referencia inválida" aria-invalid="true" style="height:28px;padding:0 10px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:inset 0 0 0 1px var(--health-critical-solid);outline:none">
+          <label style="display:flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:var(--r-md);background:var(--surface-content);box-shadow:inset 0 0 0 0.5px var(--border-default);color:var(--text-tertiary)"><svg width="14" height="14"><use href="#i-search"></use></svg><input placeholder="Buscar o ejecutar…" style="flex:1;border:0;background:transparent;outline:none"><span style="font-size:var(--type-note-size);padding:1px 5px;border-radius:4px;border:0.5px solid var(--border-default)">⌘K</span></label>
+          <textarea rows="2" placeholder="Notas del reporte" style="padding:8px 10px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:inset 0 0 0 0.5px var(--border-default);outline:none;resize:vertical"></textarea>
+        </div>
+      </div>
+    </section>
+    <section data-screen-label="Componentes: capas" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Capas flotantes y avisos</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken);min-height:220px"><strong style="font-weight:600">Tooltip · Popover · Menú</strong>
+          <div style="display:flex;gap:10px;align-items:center;position:relative">
+            <button onMouseEnter="{{ showTip }}" onMouseLeave="{{ hideTip }}" style="height:28px;padding:0 12px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-default);font-weight:500">Tooltip (500 ms)</button>
+            <sc-if value="{{ tipOpen }}" hint-placeholder-val="{{ false }}"><span data-anim="fade" style="position:absolute;top:34px;left:10px;padding:5px 8px;border-radius:var(--r-sm);background:var(--gray-12);color:var(--gray-1);font-size:var(--type-note-size);box-shadow:var(--shadow-2);white-space:nowrap">Re-escanear  ⌘R</span></sc-if>
+            <button onClick="{{ togglePop }}" style="height:28px;padding:0 12px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-default);font-weight:500">Popover</button>
+            <sc-if value="{{ popOpen }}" hint-placeholder-val="{{ false }}"><div data-anim-pop="" style="position:absolute;top:34px;left:130px;width:220px;padding:12px;border-radius:var(--r-lg);background:var(--mat-popover-bg);-webkit-backdrop-filter:var(--mat-popover-filter);backdrop-filter:var(--mat-popover-filter);box-shadow:var(--shadow-3), inset 0 0 0 0.5px var(--border-default);transform-origin:top left;font-size:var(--type-callout-size);color:var(--text-secondary);z-index:2"><strong style="display:block;color:var(--text-primary);margin-bottom:4px">¿Cómo se determina?</strong>Escala desde su disparador (transform-origin) con scale 0.96 → 1.</div></sc-if>
+          </div>
+          <div role="menu" style="margin-top:auto;width:210px;padding:5px;border-radius:var(--r-lg);background:var(--mat-popover-bg);box-shadow:var(--shadow-3), inset 0 0 0 0.5px var(--border-default)">
+            <div style="display:flex;align-items:center;gap:8px;height:28px;padding:0 10px;border-radius:var(--r-sm)"><svg width="14" height="14"><use href="#i-copy"></use></svg>Copiar resumen</div>
+            <div style="display:flex;align-items:center;gap:8px;height:28px;padding:0 10px;border-radius:var(--r-sm);background:var(--surface-hover)"><svg width="14" height="14"><use href="#i-braces"></use></svg>Copiar JSON</div>
+            <div style="display:flex;align-items:center;gap:8px;height:28px;padding:0 10px;border-radius:var(--r-sm);color:var(--health-critical-fg)"><svg width="14" height="14"><use href="#i-eject"></use></svg>Expulsar disco</div>
+          </div>
+        </div>
+        <div style="position:relative;display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken);overflow:hidden;min-height:220px"><strong style="font-weight:600">Dialog y Sheet</strong>
+          <div style="position:absolute;inset:44px 18px 18px;border-radius:var(--r-lg);background:var(--surface-overlay)"></div>
+          <div style="position:relative;align-self:center;width:260px;margin-top:8px;padding:14px;border-radius:var(--r-xl);background:var(--mat-sheet-bg);box-shadow:var(--shadow-3), inset 0 0 0 0.5px var(--border-default);display:flex;flex-direction:column;gap:8px"><strong style="font-weight:600">¿Cancelar el escaneo?</strong><span style="font-size:var(--type-callout-size);color:var(--text-secondary)">Se conservarán los resultados parciales.</span><div style="display:flex;justify-content:flex-end;gap:6px"><span style="height:24px;padding:0 10px;display:grid;place-items:center;border-radius:var(--r-md);background:var(--surface-raised-2);font-size:var(--type-callout-size)">Seguir</span><span style="height:24px;padding:0 10px;display:grid;place-items:center;border-radius:var(--r-md);background:var(--health-critical-solid);color:#fff;font-size:var(--type-callout-size);font-weight:600">Cancelar escaneo</span></div></div>
+          <span style="position:relative;font-size:var(--type-note-size);color:var(--text-secondary)">Dialog: scale .96→1 desde el centro. Sheet: baja 24 px desde el borde superior de la ventana (--ease-drawer, 320 ms).</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken);min-height:220px"><div style="display:flex;justify-content:space-between;align-items:center"><strong style="font-weight:600">Toast</strong><button onClick="{{ addToast }}" style="height:24px;padding:0 10px;border:0;border-radius:var(--r-md);background:var(--surface-raised);box-shadow:inset 0 0 0 0.5px var(--border-default);font-size:var(--type-callout-size);font-weight:500">Reproducir</button></div>
+          <div data-ds-toast="" style="display:flex;gap:10px;align-items:flex-start;padding:12px 10px 12px 14px;border-radius:var(--r-lg);background:var(--mat-popover-bg);box-shadow:var(--shadow-3), inset 0 0 0 0.5px var(--border-default)"><svg width="16" height="16" style="flex:none;color:var(--accent-fg);margin-top:1px"><use href="#i-thunderbolt"></use></svg><div style="flex:1;display:flex;flex-direction:column;gap:2px"><strong style="font-weight:600">Disco conectado</strong><span style="font-size:var(--type-callout-size);color:var(--text-secondary)">Samsung SSD 990 PRO 2TB · Thunderbolt 5</span></div><svg width="12" height="12" style="color:var(--text-tertiary)"><use href="#i-x"></use></svg></div>
+          <span style="font-size:var(--type-note-size);color:var(--text-secondary)">Entra desde arriba a la derecha, se apila, el hover pausa el temporizador y se descarta deslizándolo (&gt; 80 px).</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <sc-for list="{{ banners }}" as="b" hint-placeholder-count="4">
+          <!-- @component Banner | variants: info, success, warning, critical -->
+          <div data-component="Banner" data-variant="{{ b.v }}" style="display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:var(--r-lg);background:{{ b.bg }};box-shadow:inset 0 0 0 0.5px {{ b.br }}"><svg width="16" height="16" style="flex:none;color:{{ b.fg }}"><use href="{{ b.i }}"></use></svg><span><strong style="font-weight:600;color:{{ b.fg }}">{{ b.t }}.</strong> {{ b.b }}</span></div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section data-screen-label="Componentes: estado y métricas" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Estado, etiquetas y métricas</h2>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">HealthBadge · sm / md / lg</strong>
+          <sc-for list="{{ badges }}" as="b" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px 0 5px;border-radius:var(--r-pill);background:{{ b.bg }};color:{{ b.fg }};box-shadow:inset 0 0 0 0.5px {{ b.border }};font-size:var(--type-note-size);font-weight:600"><svg width="12" height="12"><use href="{{ b.icon }}"></use></svg>{{ b.label }}</span>
+              <span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px 0 6px;border-radius:var(--r-pill);background:{{ b.bg }};color:{{ b.fg }};box-shadow:inset 0 0 0 0.5px {{ b.border }};font-size:var(--type-callout-size);font-weight:600"><svg width="13" height="13"><use href="{{ b.icon }}"></use></svg>{{ b.label }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px 0 8px;border-radius:var(--r-pill);background:{{ b.bg }};color:{{ b.fg }};box-shadow:inset 0 0 0 0.5px {{ b.border }};font-weight:600"><svg width="15" height="15"><use href="{{ b.icon }}"></use></svg>{{ b.label }}</span>
+            </div>
+          </sc-for>
+          <strong style="font-weight:600;margin-top:6px">ConnectionBadge</strong>
+          <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ conns }}" as="c" hint-placeholder-count="4"><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:var(--r-sm);background:var(--surface-hover);color:var(--text-secondary);font-size:var(--type-callout-size);font-weight:500"><svg width="13" height="13"><use href="{{ c.icon }}"></use></svg>{{ c.label }}</span></sc-for></div>
+          <strong style="font-weight:600;margin-top:6px">Chip · filtro y bandera · Kbd</strong>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+            <span style="height:24px;padding:0 10px;display:inline-flex;align-items:center;border-radius:var(--r-pill);background:var(--accent-soft);color:var(--accent-fg);border:1px solid var(--accent-border);font-family:var(--font-mono);font-size:var(--type-note-size)">-x</span>
+            <span style="height:24px;padding:0 10px;display:inline-flex;align-items:center;border-radius:var(--r-pill);color:var(--text-secondary);border:1px solid var(--border-default);font-family:var(--font-mono);font-size:var(--type-note-size)">-l error</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px 0 7px;border-radius:var(--r-pill);background:var(--accent-soft);color:var(--accent-fg);border:1px solid var(--accent-border);font-size:var(--type-callout-size);font-weight:500"><svg width="12" height="12"><use href="#i-check"></use></svg>Format NVM</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px 0 7px;border-radius:var(--r-pill);color:var(--text-tertiary);border:1px dashed var(--border-default);font-size:var(--type-callout-size);font-weight:500"><svg width="12" height="12"><use href="#i-x"></use></svg>Gestión de namespaces</span>
+            <sc-for list="{{ kbds }}" as="k" hint-placeholder-count="9"><span style="font-size:var(--type-note-size);color:var(--text-secondary);padding:1px 5px;border-radius:4px;border:0.5px solid var(--border-default)">{{ k }}</span></sc-for>
+          </div>
+          <strong style="font-weight:600;margin-top:6px">KeyValue</strong>
+          <div style="border-radius:var(--r-lg);background:var(--surface-raised);padding:4px 0">
+            <div style="display:grid;grid-template-columns:150px 1fr auto;gap:12px;align-items:center;min-height:32px;padding:0 8px 0 14px"><span style="color:var(--text-secondary);font-size:var(--type-callout-size)">Número de serie</span><span style="font-family:var(--font-mono);font-size:var(--type-callout-size)">S7DNNJ•••••••••</span><span style="display:flex;gap:2px;color:var(--text-secondary)"><svg width="13" height="13"><use href="#i-eye"></use></svg><svg width="13" height="13" style="margin-left:8px"><use href="#i-copy"></use></svg></span></div>
+            <div style="display:grid;grid-template-columns:150px 1fr auto;gap:12px;align-items:center;min-height:32px;padding:0 8px 0 14px"><span style="color:var(--text-secondary);font-size:var(--type-callout-size)">Ruta IOService</span><span style="font-family:var(--font-mono);font-size:var(--type-callout-size);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">IOService:/AppleARMPE/arm…/Samsung SSD 990 PRO 2TB Media</span><span style="color:var(--text-secondary)"><svg width="13" height="13"><use href="#i-copy"></use></svg></span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">LifeRing · S / M / L × 5 estados</strong>
+          <div style="display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:12px 20px;align-items:center">
+            <sc-for list="{{ rings }}" as="r" hint-placeholder-count="15">
+              <div style="position:relative;width:{{ r.size }};height:{{ r.size }}"><svg width="100%" height="100%" viewBox="{{ r.vb }}" style="transform:rotate(-90deg);display:block"><circle cx="{{ r.cx }}" cy="{{ r.cx }}" r="{{ r.r }}" fill="none" style="stroke:{{ r.trackC }};stroke-width:{{ r.w }};stroke-dasharray:{{ r.dash }}"></circle><circle cx="{{ r.cx }}" cy="{{ r.cx }}" r="{{ r.r }}" fill="none" style="stroke:{{ r.solid }};stroke-width:{{ r.w }};stroke-linecap:round;stroke-dasharray:{{ r.c }};stroke-dashoffset:{{ r.off }}"></circle></svg><span style="position:absolute;inset:0;display:grid;place-items:center;font-size:{{ r.fs }};font-weight:650">{{ r.label }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;border-radius:var(--r-lg);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-subtle)"><span style="display:flex;justify-content:space-between;font-size:var(--type-callout-size);color:var(--text-secondary)"><span>Repuesto disponible</span><span style="color:var(--health-critical-fg);font-weight:600;font-size:var(--type-note-size)">Crítico</span></span><span style="font-size:var(--type-metric-size);line-height:var(--type-metric-lh);font-weight:600;letter-spacing:var(--type-metric-track)">4<span style="font-size:13px;color:var(--text-secondary);margin-left:3px">%</span></span><div style="position:relative;height:5px;border-radius:3px;background:var(--ring-track)"><div style="height:100%;width:4%;border-radius:3px;background:var(--health-critical-solid)"></div><span style="position:absolute;top:-3px;left:10%;width:2px;height:11px;border-radius:1px;background:var(--text-primary)"></span></div><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">StatTile + medidor · umbral 10 %</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;border-radius:var(--r-lg);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-subtle)"><span style="display:flex;justify-content:space-between;font-size:var(--type-callout-size);color:var(--text-secondary)"><span>Datos escritos</span><span style="color:var(--accent-fg);font-weight:600;font-size:var(--type-note-size)">↑ +0.8 TB</span></span><span style="font-size:var(--type-metric-size);line-height:var(--type-metric-lh);font-weight:600;letter-spacing:var(--type-metric-track)">31.64<span style="font-size:13px;color:var(--text-secondary);margin-left:3px">TB</span></span><svg viewBox="0 0 120 24" width="100%" height="24" style="overflow:visible"><path d="{{ spark }}" fill="none" style="stroke:var(--data-temp);stroke-width:1.5"></path></svg><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">StatTile + delta + sparkline</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:14px 16px;border-radius:var(--r-lg);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-subtle)"><span style="font-size:var(--type-callout-size);color:var(--text-secondary)">Indicador de temperatura</span><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px 0 6px;border-radius:var(--r-sm);background:var(--surface-hover);font-size:var(--type-note-size);font-weight:600"><svg width="12" height="12"><use href="#i-thermometer"></use></svg>41 °C</span><span style="display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px 0 6px;border-radius:var(--r-sm);background:var(--health-warning-bg);color:var(--health-warning-fg);font-size:var(--type-note-size);font-weight:600"><svg width="12" height="12"><use href="#i-thermometer"></use></svg>84 °C</span><span style="display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px 0 6px;border-radius:var(--r-sm);background:var(--health-critical-bg);color:var(--health-critical-fg);font-size:var(--type-note-size);font-weight:600"><svg width="12" height="12"><use href="#i-thermometer"></use></svg>88 °C</span></div><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">Normal · sobre advertencia · sobre crítica</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:14px 16px;border-radius:var(--r-lg);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-subtle)"><span style="font-size:var(--type-callout-size);color:var(--text-secondary)">Progreso</span><div style="height:6px;border-radius:3px;background:var(--ring-track);overflow:hidden"><div style="height:100%;width:100%;background:var(--accent);transform-origin:left;transform:scaleX(0.37)"></div></div><div style="height:6px;border-radius:3px;background:var(--ring-track);overflow:hidden"><div style="height:100%;width:40%;background:var(--accent);animation:hdi-indet 1.4s var(--ease-in-out) infinite"></div></div><div style="display:flex;gap:10px;align-items:center"><svg width="24" height="24" viewBox="0 0 24 24" style="transform:rotate(-90deg)"><circle cx="12" cy="12" r="10" fill="none" style="stroke:var(--ring-track);stroke-width:3"></circle><circle cx="12" cy="12" r="10" fill="none" style="stroke:var(--accent);stroke-width:3;stroke-dasharray:62.83;stroke-dashoffset:39.6;stroke-linecap:round"></circle></svg><svg width="20" height="20" viewBox="0 0 16 16" style="animation:hdi-spin .9s linear infinite"><circle cx="8" cy="8" r="6.5" fill="none" style="stroke:var(--ring-track);stroke-width:2"></circle><path d="M8 1.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" style="stroke:var(--accent);stroke-width:2;stroke-linecap:round"></path></svg><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">barra/anillo · det./indet.</span></div></div>
+      </div>
+    </section>
+    <section data-screen-label="Componentes: gráficos y consola" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">Gráficos, datos y consola</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:var(--r-xl);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-subtle)"><strong style="font-weight:600">LiveLineChart · temperatura con bandas</strong>
+          <svg viewBox="0 0 380 96" width="100%" style="display:block"><rect x="0" y="10" width="380" height="14" style="fill:var(--band-warn)"></rect><rect x="0" y="0" width="380" height="10" style="fill:var(--band-crit)"></rect><line x1="0" x2="380" y1="24" y2="24" style="stroke:var(--data-warn);stroke-dasharray:4 4"></line><line x1="0" x2="380" y1="10" y2="10" style="stroke:var(--data-crit);stroke-dasharray:4 4"></line><defs><clipPath id="ds-n"><rect x="0" y="24" width="380" height="80"></rect></clipPath><clipPath id="ds-w"><rect x="0" y="0" width="380" height="24"></rect></clipPath></defs><path d="{{ tempPath }}" fill="none" style="clip-path:url(#ds-n);stroke:var(--data-temp);stroke-width:1.75"></path><path d="{{ tempPath }}" fill="none" style="clip-path:url(#ds-w);stroke:var(--data-warn);stroke-width:1.75"></path></svg>
+          <span style="font-size:var(--type-note-size);color:var(--text-tertiary)">El segmento que cruza el umbral cambia de color (clipPath por banda); el badge hace un solo pulso.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:var(--r-xl);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-subtle)"><strong style="font-weight:600">SpeedChart · velocidad por posición (LBA)</strong>
+          <svg viewBox="0 0 380 96" width="100%" style="display:block"><line x1="0" x2="380" y1="15" y2="15" style="stroke:var(--chart-grid)"></line><line x1="0" x2="380" y1="52" y2="52" style="stroke:var(--chart-grid)"></line><line x1="0" x2="380" y1="90" y2="90" style="stroke:var(--chart-grid)"></line><path d="{{ speedPath }}" fill="none" style="stroke:var(--data-speed);stroke-width:1.5"></path><line x1="114" x2="114" y1="4" y2="90" style="stroke:var(--data-crit)"></line><line x1="235" x2="235" y1="4" y2="90" style="stroke:var(--data-crit)"></line><line x1="304" x2="304" y1="4" y2="90" style="stroke:var(--data-crit)"></line></svg>
+          <span style="font-size:var(--type-note-size);color:var(--text-tertiary)">Marcadores rojos = zonas ilegibles. Sparkline: mismo trazo a 1.25–1.5 px sin ejes.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:var(--r-xl);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-subtle)"><strong style="font-weight:600">Table · encabezado fijo, orden</strong>
+          <div style="border-radius:var(--r-md);box-shadow:inset 0 0 0 0.5px var(--border-subtle);overflow:hidden;font-size:var(--type-callout-size)">
+            <div style="display:grid;grid-template-columns:1.6fr 70px 90px;gap:10px;height:28px;align-items:center;padding:0 12px;font-size:var(--type-note-size);font-weight:600;color:var(--text-tertiary);background:var(--surface-sunken)"><span style="display:flex;align-items:center;gap:4px;color:var(--text-primary)">Atributo<svg width="10" height="10"><use href="#i-arrow-down"></use></svg></span><span style="text-align:right">Valor</span><span>Estado</span></div>
+            <div style="display:grid;grid-template-columns:1.6fr 70px 90px;gap:10px;height:30px;align-items:center;padding:0 12px"><span>Repuesto disponible</span><span style="text-align:right;font-weight:600">4 %</span><span style="display:inline-flex;align-items:center;gap:4px;color:var(--health-critical-fg)"><svg width="12" height="12"><use href="#i-octagon"></use></svg>Crítico</span></div>
+            <div style="display:grid;grid-template-columns:1.6fr 70px 90px;gap:10px;height:30px;align-items:center;padding:0 12px;background:var(--surface-hover)"><span>Errores de medios</span><span style="text-align:right;font-weight:600">3</span><span style="display:inline-flex;align-items:center;gap:4px;color:var(--health-warning-fg)"><svg width="12" height="12"><use href="#i-alert"></use></svg>Atención</span></div>
+            <div style="display:grid;grid-template-columns:1.6fr 70px 90px;gap:10px;height:30px;align-items:center;padding:0 12px"><span>Horas de encendido</span><span style="text-align:right;font-weight:600">2,164</span><span style="display:inline-flex;align-items:center;gap:4px;color:var(--health-optimal-fg)"><svg width="12" height="12"><use href="#i-check-circle"></use></svg>Normal</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:var(--r-xl);background:var(--surface-raised);box-shadow:var(--shadow-1), inset 0 0 0 0.5px var(--border-subtle)"><strong style="font-weight:600">JsonViewer · CommandBlock · ConsoleItem</strong>
+          <div style="padding:8px 0;border-radius:var(--r-md);background:var(--surface-code);font-family:var(--font-mono);font-size:var(--type-mono-size);line-height:var(--type-mono-lh);white-space:pre">
+            <div style="padding-left:12px"><span style="color:var(--text-tertiary)">▾ </span><span style="color:var(--syn-punct)">{</span></div>
+            <div style="padding-left:28px"><span style="color:var(--syn-key)">"model_name"</span><span style="color:var(--syn-punct)">: </span><span style="color:var(--syn-string)">"Samsung SSD 990 PRO 2TB"</span><span style="color:var(--syn-punct)">,</span></div>
+            <div style="padding-left:28px;background:var(--health-warning-bg)"><span style="color:var(--syn-key)">"percentage_used"</span><span style="color:var(--syn-punct)">: </span><span style="color:var(--syn-number)">2</span><span style="color:var(--syn-punct)">,</span></div>
+            <div style="padding-left:28px"><span style="color:var(--syn-key)">"passed"</span><span style="color:var(--syn-punct)">: </span><span style="color:var(--syn-bool)">true</span></div>
+            <div style="padding-left:12px"><span style="color:var(--syn-punct)">}</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;height:32px;padding:0 6px 0 12px;border-radius:var(--r-md);background:var(--surface-code);box-shadow:inset 0 0 0 0.5px var(--border-subtle);font-family:var(--font-mono);font-size:var(--type-mono-size)"><span style="color:var(--text-tertiary)">$</span><span style="flex:1">smartctl -x -j disk4</span><svg width="13" height="13" style="color:var(--text-secondary)"><use href="#i-copy"></use></svg></div>
+          <div style="display:grid;grid-template-columns:64px 1fr auto 50px;gap:10px;align-items:center;min-height:30px;font-size:var(--type-callout-size)"><span style="font-family:var(--font-mono);font-size:var(--type-note-size);color:var(--text-tertiary)">10:42:18</span><span style="font-family:var(--font-mono)">smartctl -x -j disk0</span><span style="height:18px;padding:0 7px;display:inline-flex;align-items:center;border-radius:var(--r-pill);background:var(--health-warning-bg);color:var(--health-warning-fg);font-size:var(--type-caption-size);font-weight:600">4 · Lectura parcial: un comando falló</span><span style="text-align:right;font-size:var(--type-note-size);color:var(--text-tertiary)">0.21 s</span></div>
+        </div>
+      </div>
+    </section>
+    <section id="dispositivos" data-screen-label="Componentes: dispositivos" style="display:flex;flex-direction:column;gap:18px">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:var(--type-title1-size);line-height:var(--type-title1-lh);font-weight:var(--type-title1-weight);letter-spacing:var(--type-title1-track)">DeviceCard · todos los estados</h2>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px">
+        <sc-for list="{{ cards }}" as="c" hint-placeholder-count="8">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:var(--font-mono);font-size:var(--type-note-size);color:var(--text-tertiary)">{{ c.st }}</span>
+            <div data-component="DeviceCard" data-state="{{ c.st }}" style="position:relative;display:flex;flex-direction:column;gap:12px;min-height:180px;padding:14px;border-radius:var(--r-xl);background:var(--surface-raised);box-shadow:{{ c.shadow }};outline:0.5px solid var(--border-subtle);outline-offset:-0.5px;filter:{{ c.filter }};opacity:{{ c.opacity }}">
+              <sc-if value="{{ c.ident }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:12px;flex:1"><div style="display:flex;gap:12px;align-items:center"><div style="width:52px;height:52px;border-radius:50%;border:5px solid var(--ring-track);animation:hdi-shimmer 1.6s ease-in-out infinite"></div><div style="flex:1;display:flex;flex-direction:column;gap:7px"><div style="height:9px;width:45%;border-radius:4px;background:var(--surface-hover);animation:hdi-shimmer 1.6s ease-in-out infinite"></div><div style="height:12px;width:85%;border-radius:4px;background:var(--surface-hover);animation:hdi-shimmer 1.6s ease-in-out .1s infinite"></div></div></div><span style="margin-top:auto;font-size:var(--type-callout-size);color:var(--text-secondary)">Leyendo datos SMART…</span></div>
+              </sc-if>
+              <sc-if value="{{ c.data }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:12px;flex:1">
+                  <div style="display:flex;gap:12px;align-items:flex-start">
+                    <div style="position:relative;width:52px;height:52px;flex:none"><svg width="52" height="52" viewBox="0 0 64 64" style="transform:rotate(-90deg);display:block"><circle cx="32" cy="32" r="29" fill="none" style="stroke:var(--ring-track);stroke-width:6"></circle><circle cx="32" cy="32" r="29" fill="none" style="stroke:{{ c.solid }};stroke-width:6;stroke-linecap:round;stroke-dasharray:{{ c.c }};stroke-dashoffset:{{ c.off }}"></circle></svg><span style="position:absolute;inset:0;display:grid;place-items:center;font-size:13px;font-weight:650">{{ c.life }}</span></div>
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px"><span style="align-self:flex-start;display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 7px 0 5px;border-radius:var(--r-pill);background:{{ c.vBg }};color:{{ c.vFg }};box-shadow:inset 0 0 0 0.5px {{ c.vBorder }};font-size:var(--type-caption-size);font-weight:600"><svg width="11" height="11"><use href="{{ c.vIcon }}"></use></svg>{{ c.vLabel }}</span><span style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.model }}</span></div>
+                  </div>
+                  <span style="align-self:flex-start;display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:var(--r-sm);background:var(--surface-hover);color:var(--text-secondary);font-size:var(--type-note-size);max-width:100%"><svg width="12" height="12" style="flex:none"><use href="{{ c.ci }}"></use></svg><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.conn }}</span></span>
+                  <div style="margin-top:auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:var(--type-callout-size)"><span style="display:flex;flex-direction:column"><span style="font-size:var(--type-caption-size);color:var(--text-tertiary)">Temp.</span><span style="font-weight:600">{{ c.temp }}</span></span><span style="display:flex;flex-direction:column"><span style="font-size:var(--type-caption-size);color:var(--text-tertiary)">Escritos</span><span style="font-weight:600">{{ c.w }}</span></span><span style="display:flex;flex-direction:column"><span style="font-size:var(--type-caption-size);color:var(--text-tertiary)">Uso</span><span style="font-weight:600">{{ c.h }}</span></span></div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ c.nd }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:10px;flex:1"><div style="display:flex;gap:12px;align-items:center"><div style="width:52px;height:52px;border-radius:50%;border:2px dashed var(--health-nodata-border);display:grid;place-items:center;color:var(--text-tertiary)">—</div><div style="display:flex;flex-direction:column;gap:5px"><span style="align-self:flex-start;display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 7px 0 5px;border-radius:var(--r-pill);background:var(--health-nodata-bg);color:var(--health-nodata-fg);font-size:var(--type-caption-size);font-weight:600"><svg width="11" height="11"><use href="#i-circle-dashed"></use></svg>Sin datos</span><span style="font-weight:600">{{ c.model }}</span></div></div><span style="font-size:var(--type-note-size);color:var(--text-secondary)">Puente USB Realtek RTL9210: macOS no permite leer SMART por USB.</span><span style="margin-top:auto;align-self:flex-start;height:22px;padding:0 9px;display:inline-flex;align-items:center;border-radius:var(--r-sm);background:var(--accent-soft);color:var(--accent-fg);font-size:var(--type-note-size);font-weight:600">Ver alternativas</span></div>
+              </sc-if>
+              <sc-if value="{{ c.disc }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:4px;height:18px;padding:0 7px;border-radius:var(--r-pill);background:var(--surface-raised-2);font-size:var(--type-caption-size);font-weight:600;color:var(--text-secondary)">Desconectado hace 5 s</span></sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:var(--r-xl);background:var(--mat-window-bg)"><strong style="font-weight:600;padding:0 8px 6px">SidebarDeviceItem</strong>
+          <sc-for list="{{ side }}" as="i" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;border-radius:var(--r-md);background:{{ i.bg }};opacity:{{ i.op }}"><svg width="14" height="14" style="color:{{ i.fg }}"><use href="{{ i.icon }}"></use></svg><span style="flex:1">{{ i.n }}</span><sc-if value="{{ i.test }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 14 14" style="transform:rotate(-90deg)"><circle cx="7" cy="7" r="5.5" fill="none" style="stroke:var(--ring-track);stroke-width:2"></circle><circle cx="7" cy="7" r="5.5" fill="none" style="stroke:var(--accent);stroke-width:2;stroke-dasharray:34.56;stroke-dashoffset:21.8"></circle></svg></sc-if><span style="font-size:var(--type-callout-size);color:var(--text-secondary)">{{ i.t }}</span><span style="font-family:var(--font-mono);font-size:var(--type-caption-size);color:var(--text-tertiary);width:70px;text-align:right">{{ i.st }}</span></div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600;padding:0 6px 6px">Checklist / Stepper</strong>
+          <sc-for list="{{ checklist }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:10px;height:26px;padding:0 6px">
+              <span style="width:16px;height:16px;display:grid;place-items:center">
+                <sc-if value="{{ c.done }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" style="color:var(--health-optimal-solid)"><use href="#i-check-circle"></use></svg></sc-if>
+                <sc-if value="{{ c.act }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 16 16" style="animation:hdi-spin .9s linear infinite"><circle cx="8" cy="8" r="6.5" fill="none" style="stroke:var(--ring-track);stroke-width:2"></circle><path d="M8 1.5a6.5 6.5 0 0 1 6.5 6.5" fill="none" style="stroke:var(--accent);stroke-width:2;stroke-linecap:round"></path></svg></sc-if>
+                <sc-if value="{{ c.pend }}" hint-placeholder-val="{{ false }}"><span style="width:12px;height:12px;border-radius:50%;border:1.5px solid var(--border-strong)"></span></sc-if>
+                <sc-if value="{{ c.warn }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" style="color:var(--health-warning-solid)"><use href="#i-alert"></use></svg></sc-if>
+                <sc-if value="{{ c.err }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" style="color:var(--health-critical-solid)"><use href="#i-octagon"></use></svg></sc-if>
+              </span><span style="flex:1">{{ c.l }}</span><span style="font-family:var(--font-mono);font-size:var(--type-caption-size);color:var(--text-tertiary)">{{ c.st }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;padding:10px;border-radius:var(--r-xl);background:var(--mat-popover-bg);box-shadow:var(--shadow-2), inset 0 0 0 0.5px var(--border-default)"><strong style="font-weight:600;padding:4px 8px 6px">PaletteItem</strong>
+          <sc-for list="{{ palette }}" as="p" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:var(--r-md);background:{{ p.bg }};color:{{ p.fg }}"><svg width="15" height="15"><use href="{{ p.icon }}"></use></svg><span style="font-weight:500;white-space:nowrap">{{ p.label }}</span><span style="flex:1;min-width:0;font-size:var(--type-callout-size);color:{{ p.subFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.sub }}</span><span style="font-size:var(--type-note-size);color:{{ p.subFg }}">{{ p.kbd }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:16px">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:28px;border-radius:var(--r-xl);background:var(--surface-sunken)">
+          <div style="position:relative;width:120px;height:72px;display:grid;place-items:center"><span style="position:absolute;left:50%;top:50%;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;border:1px solid var(--accent-border);animation:hdi-listen 3.6s var(--ease-out) infinite"></span><svg width="44" height="44" style="color:var(--text-tertiary)"><use href="#i-ssd"></use></svg></div>
+          <strong style="font-weight:600">EmptyState · «Conecta un SSD NVMe para empezar»</strong><span style="font-size:var(--type-callout-size);color:var(--text-secondary)">Pulso de «escuchando» lento y de bajo contraste; se detiene con reducir movimiento.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">Skeleton · shimmer de opacidad</strong><div style="height:12px;width:60%;border-radius:4px;background:var(--surface-hover);animation:hdi-shimmer 1.6s ease-in-out infinite"></div><div style="height:12px;width:90%;border-radius:4px;background:var(--surface-hover);animation:hdi-shimmer 1.6s ease-in-out .1s infinite"></div><div style="height:12px;width:75%;border-radius:4px;background:var(--surface-hover);animation:hdi-shimmer 1.6s ease-in-out .2s infinite"></div><div style="height:48px;border-radius:var(--r-md);background:var(--surface-hover);animation:hdi-shimmer 1.6s ease-in-out .3s infinite"></div></div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:var(--r-xl);background:var(--surface-sunken)"><strong style="font-weight:600">SheetPreviewFrame</strong><div style="flex:1;display:grid;place-items:center"><div style="width:110px;height:142px;border-radius:4px;background:#fff;box-shadow:var(--shadow-3);padding:10px;display:flex;flex-direction:column;gap:5px"><div style="height:6px;width:60%;background:#1d2127;border-radius:1px"></div><div style="height:26px;border:1.5px solid #1d2127;border-radius:3px"></div><div style="height:4px;width:90%;background:#c8ccd2"></div><div style="height:4px;width:80%;background:#c8ccd2"></div><div style="height:4px;width:85%;background:#c8ccd2"></div></div></div><span style="font-size:var(--type-note-size);color:var(--text-tertiary)">Sube como papel: 24 px + opacidad + sombra que crece.</span></div>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const hv = (v, k) => 'var(--health-' + v + '-' + k + ')';
+const VER = [['optimal', 'Óptimo', '#i-shield-check'], ['good', 'Bueno', '#i-check-circle'], ['warning', 'Atención', '#i-alert'], ['critical', 'Crítico', '#i-octagon'], ['nodata', 'Sin datos', '#i-circle-dashed']];
+const EASE = 'cubic-bezier(0.23, 1, 0.32, 1)';
+
+class Component extends DCLogic {
+  state = { theme: 'dark', speed: 1, rm: false, seg: 1, tab: 0, tabInd: { x: 0, w: 0 }, sw: true, cb: true, radio: 0, toastN: 0, tip: false, pop: false };
+  M() { return window.HDIMotion; }
+  k() { return { 1: 1, 0.5: 2, 0.25: 4 }[this.state.speed]; }
+  run(el, frames, dur, easing) { if (!el) return; if (this.state.rm) { el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 150 * this.k() }); return; } el.animate(frames, { duration: dur * this.k(), easing }); }
+  componentDidUpdate() { const bar = document.querySelector('[data-ds-tabs]'); if (bar) { const a = bar.querySelector('[data-active="true"]'); if (a && (a.offsetLeft !== this.state.tabInd.x || a.offsetWidth !== this.state.tabInd.w)) this.setState({ tabInd: { x: a.offsetLeft, w: a.offsetWidth } }); } }
+  componentDidMount() { setTimeout(() => this.forceUpdate(), 100); }
+  renderVals() {
+    const s = this.state, sb = on => ({ bg: on ? 'var(--surface-raised)' : 'transparent', shadow: on ? 'var(--shadow-1)' : 'none', fg: on ? 'var(--text-primary)' : 'var(--text-secondary)', on: on ? 'true' : 'false' });
+    const spring = b => (window.HDIMotion ? window.HDIMotion.spring({ bounce: b, duration: 0.4 }) : EASE);
+    const move = (id, dur, ease) => () => this.run(document.querySelector('[data-demo="' + id + '"]'), [{ transform: 'translateX(0)' }, { transform: 'translateX(' + ((document.querySelector('[data-demo="' + id + '"]') || {}).parentElement.offsetWidth - 20) + 'px)' }], dur, ease);
+    const S = ['S', 'M', 'L'], RS = { S: [28, 3.5], M: [64, 6], L: [120, 10] };
+    const rings = [];
+    VER.forEach(([v, l], i) => { const life = [98, 58, 12, 9, 0][i]; S.forEach(sz => { const [d, w] = RS[sz]; const r = (d - w) / 2, c = 2 * Math.PI * r; rings.push({ size: d + 'px', vb: '0 0 ' + d + ' ' + d, cx: d / 2, r, w, c: c.toFixed(2), off: (c * (1 - life / 100)).toFixed(2), solid: hv(v, 'solid'), label: v === 'nodata' ? '—' : String(life), fs: sz === 'L' ? '28px' : sz === 'M' ? '15px' : '9px', nd: v === 'nodata', dash: v === 'nodata' ? '3 4' : 'none', trackC: v === 'nodata' ? hv('nodata', 'border') : 'var(--ring-track)', show: sz !== 'S' || v !== 'nodata' || true }); }); });
+    const sp = (arr, w, h) => { const mn = Math.min(...arr) - 1, mx = Math.max(...arr) + 1; return arr.map((v, i) => (i ? 'L' : 'M') + (i * w / (arr.length - 1)).toFixed(1) + ' ' + (h - (v - mn) / (mx - mn) * h).toFixed(1)).join(' '); };
+    const spark = sp([41, 42, 41, 41, 42, 43, 42, 41, 40, 41, 42, 42, 43, 44, 43, 42, 41, 41, 42, 41], 120, 24);
+    const speedPath = Array.from({ length: 120 }, (_, i) => { const q = i / 119; let v = 2870 + Math.sin(q * 37) * 70 + Math.sin(q * 113) * 45; if ([0.3, 0.62, 0.8].some(z => Math.abs(z - q) < 0.006)) v = 40; return (i ? 'L' : 'M') + (q * 380).toFixed(1) + ' ' + (90 - v / 3200 * 80).toFixed(1); }).join(' ');
+    const tempPath = Array.from({ length: 120 }, (_, i) => (i ? 'L' : 'M') + (i * 380 / 119).toFixed(1) + ' ' + (90 - (41 + (i > 80 ? (i - 80) * 1.1 : 0) + Math.sin(i / 3) * 1.2 - 20) / 70 * 80).toFixed(1)).join(' ');
+    return {
+      theme: s.theme, motion: s.rm ? 'reduced' : 'full', k: this.k(),
+      nav: [['#marca', 'Marca'], ['#color', 'Color'], ['#tipografia', 'Tipografía'], ['#movimiento', 'Movimiento'], ['#componentes', 'Componentes'], ['#dispositivos', 'Dispositivos']].map(([href, label]) => ({ href, label })),
+      themes: [['dark', 'Oscuro'], ['light', 'Claro']].map(([k, l]) => ({ label: l, ...sb(s.theme === k), pick: () => { const f = () => this.setState({ theme: k }); if (document.startViewTransition && !s.rm) document.startViewTransition(() => new Promise(r => this.setState({ theme: k }, r))); else f(); } })),
+      speeds: [[1, '1×'], [0.5, '0.5×'], [0.25, '0.25×']].map(([k, l]) => ({ label: l, ...sb(s.speed === k), pick: () => this.setState({ speed: k }) })),
+      rmOn: s.rm ? 'true' : 'false', rmTrack: s.rm ? 'var(--accent)' : 'var(--gray-6)', rmKnob: s.rm ? 'translateX(12px)' : 'none', toggleRm: () => this.setState({ rm: !s.rm }),
+      themePair: [{ key: 'dark', label: 'Tema oscuro' }, { key: 'light', label: 'Tema claro' }],
+      grays: Array.from({ length: 12 }, (_, i) => ({ n: String(i + 1), v: 'var(--gray-' + (i + 1) + ')' })),
+      accents: ['--accent', '--accent-hover', '--accent-pressed', '--accent-soft', '--accent-border'].map(n => ({ n, v: 'var(' + n + ')' })),
+      health: VER.map(([v, l, i]) => ({ label: l, icon: i, fg: hv(v, 'fg'), bg: hv(v, 'bg'), border: hv(v, 'border'), solid: hv(v, 'solid') })),
+      dataC: ['--data-temp', '--data-temp-2', '--data-read', '--data-write', '--data-warn', '--data-crit', '--band-warn', '--band-crit'].map(n => ({ n: n.replace('--', ''), v: 'var(' + n + ')' })),
+      type: [['display', 'var(--font-display)', 34, 40, 700, '-0.022em', '98 % de vida útil'], ['title1', 'var(--font-display)', 24, 30, 650, '-0.016em', 'Samsung SSD 990 PRO 2TB'], ['title2', 'var(--font-display)', 18, 24, 650, '-0.010em', 'Estado crítico: respalda tus datos'], ['title3', 'var(--font-sans)', 15, 20, 600, '-0.005em', 'Log de salud NVMe'], ['body', 'var(--font-sans)', 13, 18, 400, '-0.001em', 'Lee toda la superficie sin escribir nada y mide la velocidad sostenida.'], ['callout', 'var(--font-sans)', 12, 16, 400, '0', 'Umbral del fabricante: 10 %'], ['note', 'var(--font-sans)', 11, 14, 400, '0.005em', '27 apagados inseguros'], ['caption', 'var(--font-sans)', 10, 13, 600, '0.04em', 'DESGASTE · USO · INTEGRIDAD'], ['metric', 'var(--font-sans)', 22, 26, 600, '-0.018em', '31.64 TB · 2,164 h'], ['mono', 'var(--font-mono)', 12, 18, 400, '0', 'smartctl -x -j disk4']]
+        .map(([t, f, sz, lh, w, tr, sample]) => ({ token: t, font: f, size: sz + 'px', lh: lh + 'px', weight: w, track: tr, sample, spec: sz + '/' + lh + ' · ' + w + ' · ' + tr })),
+      space: ['sp-1', 'sp-2', 'sp-3', 'sp-4', 'sp-5', 'sp-6', 'sp-8', 'sp-10', 'sp-12', 'sp-16'].map(n => ({ n, v: { 'sp-1': '4px', 'sp-2': '8px', 'sp-3': '12px', 'sp-4': '16px', 'sp-5': '20px', 'sp-6': '24px', 'sp-8': '32px', 'sp-10': '40px', 'sp-12': '48px', 'sp-16': '64px' }[n] })),
+      radii: ['r-xs', 'r-sm', 'r-md', 'r-lg', 'r-xl', 'r-2xl', 'r-window'].map(n => ({ n, v: 'var(--' + n + ')' })),
+      shadows: ['shadow-1', 'shadow-2', 'shadow-3', 'shadow-window'].map(n => ({ n, v: 'var(--' + n + ')' })),
+      mats: [['Barra lateral / ventana', 'window'], ['Barra superior', 'toolbar'], ['Popover', 'popover'], ['Hoja', 'sheet']].map(([l, t]) => ({ label: l, token: '--mat-' + t + '-bg', bg: 'var(--mat-' + t + '-bg)', filter: 'var(--mat-' + t + '-filter)', solid: t === 'window' ? 'light-dark(oklch(0.945 0.004 255), oklch(0.205 0.008 255))' : t === 'toolbar' ? 'var(--surface-content)' : 'var(--surface-raised)' })),
+      icons: ['#i-ssd', '#i-enclosure', '#i-thunderbolt', '#i-usb', '#i-chip', '#i-thermometer', '#i-shield', '#i-shield-check', '#i-clock', '#i-power', '#i-bolt', '#i-log', '#i-test', '#i-report', '#i-pulse', '#i-scan', '#i-sample', '#i-check-circle', '#i-alert', '#i-octagon', '#i-circle-dashed', '#i-info', '#i-help', '#i-lock', '#i-copy', '#i-eye', '#i-eye-off', '#i-eject', '#i-plug', '#i-terminal', '#i-braces', '#i-id', '#i-history', '#i-settings', '#i-search', '#i-refresh', '#i-download', '#i-folder', '#i-trash', '#i-external'],
+      layers: [['--z-base', 0], ['--z-sticky', 10], ['--z-sidebar', 20], ['--z-drawer', 30], ['--z-popover', 40], ['--z-dialog', 50], ['--z-toast', 60], ['--z-palette', 70], ['--z-scenario', 80], ['--z-tooltip', 90]].map(([n, v]) => ({ n, v: String(v) })),
+      durs: [['--dur-press', 120, 'press'], ['--dur-fast', 160, 'fast'], ['--dur-base', 220, 'base'], ['--dur-moderate', 320, 'moderate'], ['--dur-data', 900, 'data'], ['--dur-exit-base', 155, 'exit']].map(([n, v, id]) => ({ n, v: v + ' ms', id: 'd-' + id, play: move('d-' + id, v, EASE) })),
+      curves: [['--ease-out', '0.23, 1, 0.32, 1', EASE, 'ease-out'], ['--ease-in-out', '0.77, 0, 0.175, 1', 'cubic-bezier(0.77, 0, 0.175, 1)', 'ease-in-out'], ['--ease-drawer', '0.32, 0.72, 0, 1', 'cubic-bezier(0.32, 0.72, 0, 1)', 'drawer'], ['spring layout', 'bounce 0 · 0.4 s', spring(0), 'spring0'], ['spring gesto', 'bounce 0.15 · 0.4 s', spring(0.15), 'spring15']].map(([n, v, e, id]) => ({ n, v, id: 'c-' + id, play: () => move('c-' + id, 400, typeof e === 'string' ? e : EASE)() })),
+      six: [1, 2, 3, 4, 5, 6], playStagger: () => document.querySelectorAll('[data-stagger]').forEach((el, i) => { if (s.rm) { el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 150 * this.k() }); return; } el.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 320 * this.k(), easing: EASE, delay: Math.min(i, 5) * 40 * this.k(), fill: 'backwards' }); }),
+      presets: ['pop', 'dialog', 'sheet', 'toast', 'materialize', 'paper'].map(n => ({ n, play: () => { const el = document.querySelector('[data-preset-target]'); if (window.HDIMotion) window.HDIMotion.enter(el, n); } })),
+      /* components */
+      segs: ['Todos', 'Externos', 'Internos'].map((l, i) => ({ label: l, ...sb(s.seg === i), pick: () => this.setState({ seg: i }) })),
+      tabs: ['Resumen', 'Salud SMART', 'Temperatura', 'Pruebas'].map((l, i) => ({ label: l, active: s.tab === i ? 'true' : 'false', fg: s.tab === i ? 'var(--text-primary)' : 'var(--text-secondary)', pick: () => this.setState({ tab: i }) })),
+      tabX: s.tabInd.x, tabScale: (s.tabInd.w / 100).toFixed(3), tabEase: 'transform var(--dur-spring) ' + spring(0),
+      swOn: s.sw ? 'true' : 'false', swTrack: s.sw ? 'var(--accent)' : 'var(--gray-6)', swKnob: s.sw ? 'translateX(12px)' : 'none', toggleSw: () => this.setState({ sw: !s.sw }),
+      cbOn: s.cb ? 'true' : 'false', cbBox: s.cb ? 'var(--accent)' : 'transparent', cbBorder: s.cb ? 'var(--accent)' : 'var(--border-strong)', cbCheck: s.cb ? 1 : 0, toggleCb: () => this.setState({ cb: !s.cb }),
+      radios: ['Carta', 'A4'].map((l, i) => ({ label: l, on: s.radio === i ? 'true' : 'false', dot: s.radio === i ? 1 : 0, ring: s.radio === i ? 'var(--accent)' : 'var(--border-strong)', pick: () => this.setState({ radio: i }) })),
+      badges: VER.map(([v, l, i]) => ({ label: l, icon: i, fg: hv(v, 'fg'), bg: hv(v, 'bg'), border: hv(v, 'border'), solid: hv(v, 'solid') })),
+      conns: [['#i-thunderbolt', 'Thunderbolt 5 · PCIe Gen4 ×4'], ['#i-usb', 'USB4 40 Gb/s · PCIe Gen4 ×4'], ['#i-usb', 'USB 3.2 Gen 2 · Realtek RTL9210B'], ['#i-chip', 'Interno · Apple Fabric']].map(([icon, label]) => ({ icon, label })),
+      rings, spark, speedPath, tempPath,
+      banners: [['info', 'Información', 'Este disco no permite leer el log de errores (GetLogPage falló).', '#i-info', 'var(--surface-sunken)', 'var(--border-subtle)', 'var(--text-secondary)'], ['success', 'Éxito', 'Escaneo completado sin zonas ilegibles.', '#i-check-circle', hv('optimal', 'bg'), hv('optimal', 'border'), hv('optimal', 'fg')], ['warning', 'Advertencia', 'El disco se desconectó · mostrando los últimos datos leídos.', '#i-alert', hv('warning', 'bg'), hv('warning', 'border'), hv('warning', 'fg')], ['critical', 'Crítico', 'Respalda tus datos lo antes posible.', '#i-octagon', hv('critical', 'bg'), hv('critical', 'border'), hv('critical', 'fg')]]
+        .map(([v, t, b, i, bg, br, fg]) => ({ v, t, b, i, bg, br, fg })),
+      addToast: () => this.setState({ toastN: s.toastN + 1 }, () => { const el = document.querySelector('[data-ds-toast]'); if (window.HDIMotion) window.HDIMotion.enter(el, 'toast'); }),
+      tipOpen: s.tip, showTip: () => { clearTimeout(this._t); this._t = setTimeout(() => this.setState({ tip: true }), 500); }, hideTip: () => { clearTimeout(this._t); this.setState({ tip: false }); },
+      popOpen: s.pop, togglePop: () => this.setState({ pop: !s.pop }),
+      cards: [['identifying', 'Identificando'], ['optimal', 'Óptimo', 'Samsung SSD 990 PRO 2TB', '98', '41 °C', '31.64 TB', '2,164 h', '#i-thunderbolt', 'Thunderbolt 5 · PCIe Gen4 ×4'], ['good', 'Bueno', 'WD_BLACK SN850X 1TB', '58', '67 °C', '312.4 TB', '9,870 h', '#i-usb', 'USB4 40 Gb/s · PCIe Gen4 ×4'], ['warning', 'Atención', 'Kingston KC3000 1TB', '12', '52 °C', '704.2 TB', '14,322 h', '#i-thunderbolt', 'Thunderbolt 4 · PCIe Gen3 ×4'], ['critical', 'Crítico', 'SK hynix Platinum P41 2TB', '9', '49 °C', '1,352 TB', '21,870 h', '#i-thunderbolt', 'Thunderbolt 3 · PCIe Gen3 ×4'], ['nodata', 'Sin datos', 'Crucial P3 Plus 4TB'], ['disconnected', 'Desconectado', 'Kingston KC3000 1TB', '12', '52 °C', '704.2 TB', '14,322 h', '#i-thunderbolt', 'Thunderbolt 4 · PCIe Gen3 ×4'], ['selected', 'Seleccionado', 'Samsung SSD 990 PRO 2TB', '98', '41 °C', '31.64 TB', '2,164 h', '#i-thunderbolt', 'Thunderbolt 5 · PCIe Gen4 ×4']]
+        .map(([st, lab, model, life, temp, w, h, ci, conn]) => { const v = st === 'disconnected' ? 'warning' : st === 'selected' ? 'optimal' : st; const r = 29, c = 2 * Math.PI * r; const vb = VER.find(x => x[0] === v) || VER[0];
+          return { st, lab, model, life, temp, w, h, ci, conn, ident: st === 'identifying', data: !['identifying', 'nodata'].includes(st), nd: st === 'nodata', disc: st === 'disconnected', c: c.toFixed(2), off: (c * (1 - (+life || 0) / 100)).toFixed(2), solid: hv(v, 'solid'), vLabel: vb[1], vIcon: vb[2], vFg: hv(v, 'fg'), vBg: hv(v, 'bg'), vBorder: hv(v, 'border'), filter: st === 'disconnected' ? 'grayscale(1)' : 'none', opacity: st === 'disconnected' ? 0.55 : 1, shadow: st === 'selected' ? '0 0 0 2px var(--accent), var(--shadow-1)' : 'var(--shadow-1)', spark }; }),
+      side: [['default', '990 PRO 2TB', '41°', 'transparent', 1, false], ['selected', 'Platinum P41 2TB', '49°', 'var(--surface-selected)', 1, false], ['testing', '990 PRO 2TB', '53°', 'transparent', 1, true], ['disconnected', 'KC3000 1TB', '52°', 'transparent', 0.45, false]].map(([st, n, t, bg, op, test], i) => ({ st, n, t, bg, op, test, icon: ['#i-shield-check', '#i-octagon', '#i-shield-check', '#i-alert'][i], fg: hv(['optimal', 'critical', 'optimal', 'warning'][i], 'solid') })),
+      checklist: [['done', 'smartctl encontrado'], ['done', 'Salida JSON soportada'], ['active', 'Acceso a datos SMART sin privilegios'], ['pending', '6 dispositivos detectados'], ['warning', 'Versión antigua'], ['error', 'smartctl no encontrado']].map(([st, l]) => ({ st, l, done: st === 'done', act: st === 'active', pend: st === 'pending', warn: st === 'warning', err: st === 'error' })),
+      palette: [['#i-ssd', 'Samsung SSD 990 PRO 2TB', 'Thunderbolt 5 · Óptimo', '', true], ['#i-report', 'Generar reporte de Samsung 990 PRO', '', '⌘E', false], ['#i-sample', 'Iniciar escaneo rápido', '990 PRO 2TB', '', false], ['#i-thermometer', 'Ir a Temperatura', '', '⌘3', false]].map(([icon, label, sub, kbd, sel]) => ({ icon, label, sub, kbd, bg: sel ? 'var(--accent)' : 'transparent', fg: sel ? 'var(--text-on-accent)' : 'var(--text-primary)', subFg: sel ? 'var(--text-on-accent)' : 'var(--text-tertiary)' })),
+      kbds: ['⌘K', '⌘R', '⌘E', '⌘1…⌘7', '⌘J', '⌘,', 'Esc', '↑ ↓', '↵']
+    };
+  }
+}
+</script>
+</body>
+</html>

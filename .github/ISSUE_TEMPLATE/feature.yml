@@ -1,0 +1,22 @@
+name: Propuesta
+description: Una idea o mejora.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema o necesidad
+      description: ¿Qué quieres lograr y por qué?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Propuesta
+      description: Si cambia la interfaz, indica cómo encaja con el prototipo de diseño (`prototype-design/`).
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: Plataformas
+      multiple: true
+      options: [macOS, Windows, Linux]

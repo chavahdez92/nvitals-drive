@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Interfaz (TypeScript y tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: Componentes sincronizados con el prototipo
+        run: pnpm sync:design --check
+      - run: pnpm build:web
+
+  rust:
+    name: Núcleo Rust (macOS)
+    # El núcleo solo compila en macOS hasta la Fase C del plan (capa de plataforma);
+    # entonces esta tarea pasa a una matriz con windows-latest y ubuntu-22.04.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build:web
+      - name: Formato
+        run: cargo fmt --check
+        working-directory: src-tauri
+      - name: Clippy
+        run: cargo clippy --all-targets --locked -- -D warnings
+        working-directory: src-tauri
+      - name: Tests
+        run: cargo test --locked
+        working-directory: src-tauri
+      - name: Avisos de terceros al día
+        run: node scripts/third-party-notices.mjs --check
+
+  licenses:
+    name: Licencias y avisos de seguridad (cargo-deny)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          manifest-path: src-tauri/Cargo.toml
+          command: check advisories licenses sources bans
+
+  secrets:
+    name: Búsqueda de secretos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  parity:
+    name: Paridad visual (informativa)
+    runs-on: ubuntu-latest
+    needs: web
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps webkit
+      - name: Servidores de la app (mock) y del prototipo
+        run: |
+          pnpm dev:web --port 1420 --strictPort > /tmp/app.log 2>&1 &
+          pnpm exec vite -c scripts/vite.prototype.config.mjs > /tmp/proto.log 2>&1 &
+          for port in 1420 4174; do
+            for i in $(seq 1 60); do curl -sf "http://localhost:$port" > /dev/null && break; sleep 1; done
+          done
+      - run: pnpm parity
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: parity
+          path: docs/parity/
+          retention-days: 14

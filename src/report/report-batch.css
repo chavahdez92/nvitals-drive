@@ -1,0 +1,94 @@
+/* Reporte rápido de varios discos — desviación #21. Hereda .rp (report-pro.css) y el
+   encabezado de .rq (report-quick.css). Todo estado lleva ícono + texto: se lee en B/N.
+   Alturas fijas: la paginación de src/domain/batchReport.ts (ROW_H, ROOM, ATT_*) las usa. */
+
+.rb .page { gap: 12px; }
+/* Bloques de una sola línea: su alto no cambia con textos largos (referencia, empresa). */
+.rb .rq-title h1, .rb .rq-title p, .rb .rq-head__id span, .rb .rp-run__l span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rb .rq-head__id { min-width: 0; }
+.rb .rp-run__l { min-width: 0; overflow: hidden; }
+.rb .rp-run__l b, .rb .rp-run .mono { flex: none; }
+.rb .rp-foot { white-space: nowrap; }
+.rb .rp-foot > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.rb .rp-foot > span:last-child { flex: none; }
+
+/* Resumen del grupo */
+.rb-sum { display: flex; flex-direction: column; gap: 8px; }
+.rb-tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.rb-tile { display: flex; flex-direction: column; gap: 1px; padding: 7px 11px 8px; border-radius: 10px; border: 1px solid var(--gray-5); min-width: 0; }
+.rb-tile__top { display: flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600; color: var(--gray-11); white-space: nowrap; }
+.rb-tile b { font-size: 21px; line-height: 24px; font-weight: 750; letter-spacing: -0.015em; }
+.rb-tile small { font-size: 9.5px; color: var(--gray-9); white-space: nowrap; }
+.rb-tile.optimal { background: var(--health-optimal-bg); border-color: var(--health-optimal-border); }
+.rb-tile.good { background: var(--health-good-bg); border-color: var(--health-good-border); }
+.rb-tile.warning { background: var(--health-warning-bg); border-color: var(--health-warning-border); }
+.rb-tile.critical { background: var(--health-critical-bg); border-color: var(--health-critical-border); }
+.rb-tile.nodata { background: var(--health-nodata-bg); border-color: var(--health-nodata-border); }
+.rb-tile.optimal svg { color: var(--health-optimal-solid); }
+.rb-tile.good svg { color: var(--health-good-solid); }
+.rb-tile.warning svg { color: var(--health-warning-solid); }
+.rb-tile.critical svg { color: var(--health-critical-solid); }
+.rb-tile.nodata svg { color: var(--health-nodata-fg); }
+.rb-tile.zero { border-color: var(--gray-4); }
+.rb-tile.zero .rb-tile__top, .rb-tile.zero b { color: var(--gray-8); }
+
+.rb-bar { display: flex; gap: 2px; height: 7px; border-radius: 4px; overflow: hidden; }
+.rb-bar span { flex-basis: 0; }
+.rb-bar .optimal { background: var(--health-optimal-solid); }
+.rb-bar .good { background: var(--health-good-solid); }
+.rb-bar .warning { background: var(--health-warning-solid); }
+.rb-bar .critical { background: var(--health-critical-solid); }
+.rb-bar .nodata { background: var(--health-nodata-solid); }
+
+.rb-facts { display: flex; gap: 18px; height: 15px; font-size: 11px; line-height: 15px; color: var(--gray-10); white-space: nowrap; overflow: hidden; }
+.rb-facts b { color: var(--gray-12); font-weight: 700; }
+.rb-facts i { font-style: normal; font-size: 10px; color: var(--gray-9); }
+.rb-cap { margin: 0; font-size: 9.5px; line-height: 13px; color: var(--gray-9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Requieren atención: hasta 5 entradas de una línea, más «+N más» */
+.rb-att { padding: 8px 12px 9px; border-radius: 10px; background: var(--v-bg); border: 1px solid var(--v-border); }
+.rb-att__h { display: flex; align-items: center; gap: 6px; height: 18px; font-size: 11.5px; font-weight: 700; color: var(--v-fg); }
+.rb-att ul { margin: 3px 0 0; padding: 0; list-style: none; }
+.rb-att li { display: flex; align-items: center; gap: 7px; height: 16px; font-size: 10.5px; white-space: nowrap; overflow: hidden; }
+.rb-att li b { font-weight: 650; flex: none; max-width: 34%; overflow: hidden; text-overflow: ellipsis; }
+.rb-att li i { font-style: normal; font-size: 9.5px; color: var(--gray-10); flex: none; }
+.rb-att__v { display: inline-flex; align-items: center; gap: 3px; flex: none; min-width: 64px; font-weight: 700; }
+.rb-att__v.critical, .rb-att__v.critical svg { color: var(--health-critical-fg); }
+.rb-att__v.warning, .rb-att__v.warning svg { color: var(--health-warning-fg); }
+.rb-att__v.nodata, .rb-att__v.nodata svg { color: var(--health-nodata-fg); }
+.rb-att__r { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--gray-11); }
+.rb-att li.rb-att__more { color: var(--gray-10); font-style: italic; }
+
+/* Tabla: filas de alto fijo (34 px, o 46 px con los datos del expediente) */
+.rb-table { display: flex; flex-direction: column; }
+.rb-row { display: grid; grid-template-columns: 18px minmax(0, 2.2fr) minmax(0, 1.6fr) minmax(0, 0.9fr) minmax(0, 0.95fr) minmax(0, 0.95fr) minmax(0, 1.3fr) minmax(0, 1fr); column-gap: 8px; align-items: center; box-sizing: border-box; height: 34px; border-bottom: 1px solid var(--gray-4); }
+.rb[data-extra] .rb-row:not(.rb-row--h) { height: 46px; }
+/* Cabecera: hasta dos líneas («Errores de medios»). */
+.rb .rb-row--h { height: 30px; align-items: end; padding-bottom: 4px; border-bottom: 1.5px solid var(--gray-12); font-size: 8.5px; line-height: 10px; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gray-9); }
+.rb-row > span { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+.rb-row b { display: block; font-size: 10.5px; line-height: 14px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rb-row small { display: block; font-size: 9.5px; line-height: 13px; color: var(--gray-10); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rb-row small i { font-style: normal; }
+.rb-row small.rb-x { color: var(--accent-fg); font-weight: 600; }
+.rb-row small.rb-bad { color: var(--health-critical-fg); font-weight: 650; }
+.rb-n { font-size: 9.5px; color: var(--gray-9); }
+.rb-date { font-weight: 500 !important; }
+.rb-val { display: inline-flex !important; align-items: center; gap: 3px; }
+.rb-val.warn, .rb-val.warn svg { color: var(--health-warning-fg); }
+.rb-val.crit, .rb-val.crit svg { color: var(--health-critical-fg); }
+
+.rb-pill { align-self: flex-start; display: inline-flex; align-items: center; gap: 3px; height: 15px; padding: 0 6px 0 4px; border-radius: 999px; font-style: normal; font-size: 9.5px; font-weight: 700; white-space: nowrap; margin-bottom: 1px; }
+.rb-pill.optimal { background: var(--health-optimal-bg); color: var(--health-optimal-fg); }
+.rb-pill.good { background: var(--health-good-bg); color: var(--health-good-fg); }
+.rb-pill.warning { background: var(--health-warning-bg); color: var(--health-warning-fg); }
+.rb-pill.critical { background: var(--health-critical-bg); color: var(--health-critical-fg); }
+.rb-pill.nodata { background: var(--health-nodata-bg); color: var(--health-nodata-fg); }
+
+.rb-mini { display: block; height: 4px; margin-top: 3px; border-radius: 2px; background: var(--gray-4); overflow: hidden; }
+.rb-mini i { display: block; height: 100%; border-radius: 2px; background: var(--gray-9); }
+.rb-row.optimal .rb-mini i { background: var(--health-optimal-solid); }
+.rb-row.good .rb-mini i { background: var(--health-good-solid); }
+.rb-row.warning .rb-mini i { background: var(--health-warning-solid); }
+.rb-row.critical .rb-mini i { background: var(--health-critical-solid); }
+
+.rb-empty { margin: 12px 0 0; font-size: 11.5px; color: var(--gray-10); }

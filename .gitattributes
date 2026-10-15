@@ -1,0 +1,13 @@
+# LF en todos los sistemas: `sync:design --check` compara byte a byte.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.icns binary
+*.pdf binary
+*.woff2 binary
+
+# El prototipo es de solo lectura y no cuenta en las estadísticas de lenguajes.
+prototype-design/** linguist-vendored
+src/report/vendor/** linguist-vendored
