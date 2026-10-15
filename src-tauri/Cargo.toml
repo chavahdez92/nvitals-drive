@@ -30,7 +30,7 @@ thiserror = "2"
 log = "0.4"
 regex = "1"
 libc = "0.2"
-lopdf = "0.42"
+lopdf = "0.45"
 
 [dev-dependencies]
 tempfile = "3"

@@ -48,7 +48,10 @@ pub fn compose_sheets(pieces: &[Vec<u8>], paper: &str) -> AppResult<Vec<u8>> {
         let num = |o: &Object| o.as_float().or_else(|_| o.as_i64().map(|v| v as f32)).unwrap_or(0.0);
         let (x0, y0, x1, y1) = (num(&mb[0]), num(&mb[1]), num(&mb[2]), num(&mb[3]));
         let resources = page.get(b"Resources").cloned().unwrap_or_else(|_| Object::Dictionary(dictionary! {}));
-        let content = d.get_page_content(pid).map_err(err)?;
+        let content = d.get_page_content(pid);
+        if content.is_empty() {
+            return Err(AppError::Other("PDF: hoja sin contenido".into()));
+        }
         out.objects.extend(d.objects);
         let form = out.add_object(Stream::new(
             dictionary! {
