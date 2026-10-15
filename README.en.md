@@ -25,15 +25,22 @@ An open-source desktop app that checks the health of NVMe SSDs. It reads SMART d
 
 | | macOS | Windows | Linux |
 |---|---|---|---|
-| Status | ✅ Stable (macOS 14+, Apple Silicon) | 🚧 In progress | 🚧 In progress |
+| Status | ✅ Stable (macOS 14+, Apple Silicon and Intel) | 🚧 In progress | 🚧 In progress |
 | Internal NVMe SMART | ✅ No privileges needed | Planned, no admin needed | Planned, one authorization per session |
 | SMART through USB enclosures | ❌ Not possible on macOS | Planned | Planned |
 | Thunderbolt / USB4 enclosures | ✅ | Planned | Planned |
 
 ## Install (macOS)
 
+Requirements: macOS 14 or later, on Apple Silicon or Intel.
+
 1. Install smartmontools: `brew install smartmontools` (optional, for the benchmark: `brew install fio`).
-2. Download the `.dmg` from the [Releases page](https://github.com/chavahdez92/nvitals-drive/releases), or build from source (below).
+2. Download the `.dmg` from the [Releases page](https://github.com/chavahdez92/nvitals-drive/releases), open it and drag the app to Applications. You can also build it from source (below).
+3. **First launch:** the app is not signed with an Apple certificate yet, so macOS blocks it the first time. Go to **System Settings → Privacy & Security** and click **Open Anyway**. Or, from Terminal:
+   ```bash
+   xattr -dr com.apple.quarantine "/Applications/NVitals Drive.app"
+   ```
+4. Optional: verify the download with `shasum -a 256 -c SHA256SUMS` (the file is in the same release).
 
 ## Privacy and safety
 

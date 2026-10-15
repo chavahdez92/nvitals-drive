@@ -1,0 +1,81 @@
+name: Release
+
+# Al publicar una etiqueta `vX.Y.Z` se compila la app y se crea un release en BORRADOR
+# con el .dmg universal (Apple Silicon + Intel), SHA256SUMS y atestación de procedencia.
+# Revisa el borrador y publícalo a mano.
+#
+# Firma: mientras no haya certificado Developer ID, la app lleva firma ad hoc
+# (`bundle.macOS.signingIdentity = "-"`) y el README explica cómo abrirla. Cuando exista,
+# agrega los secretos APPLE_* (plan §9) y quita `signingIdentity`.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  macos:
+    name: macOS (universal)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: pnpm install --frozen-lockfile
+
+      - name: La etiqueta coincide con la versión de package.json
+        run: |
+          v=$(node -p "require('./package.json').version")
+          test "v$v" = "$GITHUB_REF_NAME" || { echo "La etiqueta $GITHUB_REF_NAME no coincide con package.json ($v)"; exit 1; }
+
+      - name: Notas del release (sección del CHANGELOG)
+        id: notes
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="$v" '$0 ~ "^## \\[" v "\\]" {on=1; next} /^## \[/ {on=0} on' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+          cat >> "$RUNNER_TEMP/notes.md" <<'EOF'
+
+          ---
+          **Instalación (macOS 14+):** instala smartmontools (`brew install smartmontools`), abre el `.dmg` y arrastra la app a Aplicaciones.
+          Esta versión no está firmada con un certificado de Apple: la primera vez, macOS bloqueará la app. Ve a **Ajustes del Sistema → Privacidad y seguridad → Abrir de todos modos**, o ejecuta `xattr -dr com.apple.quarantine "/Applications/NVitals Drive.app"`.
+          Verifica la descarga con `shasum -a 256 -c SHA256SUMS`.
+          EOF
+          { echo 'body<<NOTES_EOF'; cat "$RUNNER_TEMP/notes.md"; echo 'NOTES_EOF'; } >> "$GITHUB_OUTPUT"
+
+      - uses: tauri-apps/tauri-action@v1
+        id: tauri
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: NVitals Drive ${{ github.ref_name }}
+          releaseBody: ${{ steps.notes.outputs.body }}
+          releaseDraft: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          args: --target universal-apple-darwin --bundles dmg
+          uploadUpdaterJson: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: SHA256SUMS
+        run: |
+          dir=src-tauri/target/universal-apple-darwin/release/bundle/dmg
+          (cd "$dir" && shasum -a 256 *.dmg > SHA256SUMS && cat SHA256SUMS)
+          gh release upload "$GITHUB_REF_NAME" "$dir/SHA256SUMS" --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg

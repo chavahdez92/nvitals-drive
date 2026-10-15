@@ -697,4 +697,12 @@ Lo que necesitas hacer tú:
 - **Decisiones resueltas (14-oct-2026):**
   - **D2:** confirmaste que los términos de la herramienta de diseño permiten redistribuir su runtime (`support.js`, `doc-page.js`); se publica sin cambios.
   - **D12:** proyecto personal; commits con el correo personal configurado solo en este repositorio. Repositorio: `chavahdez92/nvitals-drive`.
-- **Pendiente:** push, configuración de GitHub (§8.3) y release `v1.0.0`.
+- **Publicado (15-oct-2026):**
+  - Repositorio público `chavahdez92/nvitals-drive`.
+  - Configuración de GitHub (§8.3): temas, Discussions, reporte privado de vulnerabilidades, secret scanning, Dependabot, etiquetas, un milestone por fase y protección de `main` (PR obligatorio y 4 checks requeridos).
+  - Primer CI corregido: lopdf 0.42 (RUSTSEC-2026-0187), crate retirado y falsos positivos de gitleaks.
+  - Dependencias actualizadas en el PR #13: Tauri 2.12, rusqlite 0.40 y GitHub Actions. `THIRD_PARTY_NOTICES.md` ya no lista versiones.
+  - Alerta de Dependabot en `glib` 0.18 (dependencia de GTK solo en Linux, vía Tauri): se deja abierta hasta que Tauri actualice.
+- **Release `v1.0.0`:**
+  - `.github/workflows/release.yml` genera un release en borrador al publicar la etiqueta, con `.dmg` universal (D11), `SHA256SUMS` y atestación.
+  - Sin certificado de Apple (D9 pendiente): la firma es ad hoc y el README explica la primera apertura.
